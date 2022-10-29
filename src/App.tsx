@@ -2,12 +2,6 @@ import {
   AppBar,
   Button,
   Card,
-  Checkbox,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Stack,
   Toolbar,
   Typography,
@@ -19,8 +13,9 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { shuffle } from "./services/array";
 import CountdownCard from "./components/CountdownCard";
+import Speakers from "./components/Speakers";
 
-interface Worker {
+export interface Worker {
   id: string;
   displayName: string;
   isEnabledByDefault: boolean;
@@ -75,7 +70,7 @@ const App = () => {
     return () => clearInterval(intervalId);
   }, [speakerTimer]);
 
-  const handleToggle = (worker: Worker) => {
+  const onClickToggleSpeaker = (worker: Worker) => {
     const currentIndex = filteredSpeakerIds.indexOf(worker.id);
 
     if (currentIndex === -1) {
@@ -101,7 +96,7 @@ const App = () => {
 
   return (
     <Stack gap={4}>
-      <AppBar position="fixed">
+      <AppBar position="sticky">
         <Toolbar sx={{ gap: 2 }}>
           <Typography variant="h6">Tool belt</Typography>
           <Typography>Daily</Typography>
@@ -145,26 +140,11 @@ const App = () => {
         }}
         justifyContent="center"
       >
-        <Card sx={{ maxWidth: 248, p: 2 }} elevation={3}>
-          <List>
-            {speakersOrdered.map((worker) => (
-              <ListItem key={worker.id} sx={{ height: 40 }}>
-                <ListItemButton onClick={() => handleToggle(worker)} dense>
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={!filteredSpeakerIds.includes(worker.id)}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ "aria-labelledby": worker.id }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText id={worker.id} primary={worker.displayName} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Card>
+        <Speakers
+          orderedSpeakers={speakersOrdered}
+          excludedSpeakerIds={filteredSpeakerIds}
+          onClickCheckbox={onClickToggleSpeaker}
+        />
         <Stack gap={4} flex={1}>
           <Card sx={{ flex: 1, p: 2 }} elevation={3}>
             <Stack sx={{ height: "100%" }}>
