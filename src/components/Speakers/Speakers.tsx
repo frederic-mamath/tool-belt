@@ -14,8 +14,10 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { Worker } from "App";
 import { MouseEventHandler, useState } from "react";
+
+import { Worker } from "mocks/workers";
+
 interface Props {
   orderedSpeakers: Worker[];
   excludedSpeakerIds: string[];
@@ -66,7 +68,11 @@ const Speakers = (props: Props) => {
       <List>
         {orderedSpeakers.map((worker) => (
           <ListItem key={worker.id} sx={{ height: 40 }}>
-            <ListItemButton onClick={() => onClickCheckbox(worker)} dense>
+            <ListItemButton
+              disabled={worker.isOff}
+              onClick={() => onClickCheckbox(worker)}
+              dense
+            >
               <ListItemIcon>
                 <Checkbox
                   edge="start"

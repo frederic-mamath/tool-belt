@@ -10,69 +10,33 @@ import { append, without } from "ramda";
 import { DateTime, Duration } from "luxon";
 
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { shuffle } from "./services/array";
 import CountdownCard from "./components/CountdownCard";
 import Speakers from "components/Speakers";
+import Truck from "components/Truck";
+import { WORKERS, Worker } from "mocks/workers";
 
-export interface Team {
-  id: string;
-  name: string;
-}
-export interface Worker {
-  id: string;
-  displayName: string;
-  isEnabledByDefault: boolean;
-  teams: Team[];
-}
+const getCheckedWorkers = (workers: Worker[]) => {
+  return workers.filter((worker) => {
+    if (worker.isOff) {
+      return true;
+    }
 
-const WORKERS: Worker[] = [
-  {
-    id: uuidv4(),
-    displayName: "Frederic",
-    isEnabledByDefault: true,
-    teams: [],
-  },
-  { id: uuidv4(), displayName: "Jorge", isEnabledByDefault: false, teams: [] },
-  { id: uuidv4(), displayName: "Maxime", isEnabledByDefault: true, teams: [] },
-  { id: uuidv4(), displayName: "Mohamed", isEnabledByDefault: true, teams: [] },
-  { id: uuidv4(), displayName: "Othmane", isEnabledByDefault: true, teams: [] },
-  {
-    id: uuidv4(),
-    displayName: "Ramandeep",
-    isEnabledByDefault: true,
-    teams: [],
-  },
-  {
-    id: uuidv4(),
-    displayName: "Rodrigo",
-    isEnabledByDefault: false,
-    teams: [],
-  },
-  {
-    id: uuidv4(),
-    displayName: "Samantha",
-    isEnabledByDefault: true,
-    teams: [],
-  },
-  { id: uuidv4(), displayName: "Yassine", isEnabledByDefault: true, teams: [] },
-  { id: uuidv4(), displayName: "Yuliaa", isEnabledByDefault: true, teams: [] },
-  { id: uuidv4(), displayName: "Imane", isEnabledByDefault: true, teams: [] },
-  {
-    id: uuidv4(),
-    displayName: "Richard",
-    isEnabledByDefault: false,
-    teams: [],
-  },
-];
+    if (!worker.isEnabledByDefault) {
+      return true;
+    }
+
+    return false;
+  });
+};
 
 const App = () => {
-  const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(WORKERS);
+  const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(
+    shuffle(WORKERS)
+  );
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>();
   const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>(
-    WORKERS.filter((worker) => !worker.isEnabledByDefault).map(
-      (worker) => worker.id
-    )
+    getCheckedWorkers(WORKERS).map((worker) => worker.id)
   );
   const [speakerTimer, setSpeakerTimer] = useState<{
     start: DateTime;
@@ -135,10 +99,6 @@ const App = () => {
       </AppBar>
       <Stack
         sx={{
-          flexDirection: {
-            xs: "column",
-            sm: "row",
-          },
           p: {
             xs: 4,
             sm: 4,
@@ -150,66 +110,66 @@ const App = () => {
         }}
         justifyContent="center"
       >
-        <Speakers
-          orderedSpeakers={speakersOrdered}
-          excludedSpeakerIds={filteredSpeakerIds}
-          onClickCheckbox={onClickToggleSpeaker}
-          onClickShuffle={() => {
-            setSpeakersOrdered(shuffle(WORKERS));
-            setCurrentSpeakerIndex(undefined);
-          }}
-          onClickCheckAll={() => {
-            setCurrentSpeakerIndex(undefined);
-            setFilteredSpeakerIds([]);
-          }}
-        />
-        <Stack gap={4} flex={1}>
-          <Card sx={{ flex: 1, p: 2 }} elevation={3}>
-            <Stack sx={{ height: "100%" }}>
-              <Typography variant="h6">Speaker</Typography>
-              <Typography variant="h3">{currentSpeaker}</Typography>
-              <Stack flex={1} justifyContent="flex-end" alignItems="flex-end">
-                <Typography variant="body1">{stopwatch}</Typography>
-              </Stack>
-            </Stack>
-          </Card>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setSpeakerTimer({
-                start: DateTime.local(),
-                now: DateTime.local(),
-                tick: null,
-              });
-              if (currentSpeakerIndex === undefined) {
-                setCurrentSpeakerIndex(0);
-                return;
-              }
-              if (currentSpeakerIndex < speakersOrdered.length) {
-                setCurrentSpeakerIndex(currentSpeakerIndex + 1);
-                return;
-              }
+        <Stack direction="row" gap={4}>
+          <Speakers
+            orderedSpeakers={speakersOrdered}
+            excludedSpeakerIds={filteredSpeakerIds}
+            onClickCheckbox={onClickToggleSpeaker}
+            onClickShuffle={() => {
+              setSpeakersOrdered(shuffle(WORKERS));
+              setCurrentSpeakerIndex(undefined);
             }}
-            disabled={
-              !!currentSpeakerIndex &&
-              currentSpeakerIndex >= speakersOrdered.length
-            }
-          >
-            {currentSpeakerIndex === undefined ? "Start" : "Next"}
-          </Button>
-          <Card sx={{ flex: 1, p: 2, opacity: 0.4 }} elevation={3}>
-            <Stack>
-              <Typography variant="h6">Next Speaker</Typography>
-              <Typography variant="h3">
-                {nextSpeaker || "No one yet"}
-              </Typography>
-            </Stack>
-          </Card>
+            onClickCheckAll={() => {
+              setCurrentSpeakerIndex(undefined);
+              setFilteredSpeakerIds([]);
+            }}
+          />
+          <Stack gap={4} flex={1}>
+            <Card sx={{ flex: 1, p: 2 }} elevation={3}>
+              <Stack sx={{ height: "100%" }}>
+                <Typography variant="h6">Speaker</Typography>
+                <Typography variant="h3">{currentSpeaker}</Typography>
+                <Stack flex={1} justifyContent="flex-end" alignItems="flex-end">
+                  <Typography variant="body1">{stopwatch}</Typography>
+                </Stack>
+              </Stack>
+            </Card>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setSpeakerTimer({
+                  start: DateTime.local(),
+                  now: DateTime.local(),
+                  tick: null,
+                });
+                if (currentSpeakerIndex === undefined) {
+                  setCurrentSpeakerIndex(0);
+                  return;
+                }
+                if (currentSpeakerIndex < speakersOrdered.length) {
+                  setCurrentSpeakerIndex(currentSpeakerIndex + 1);
+                  return;
+                }
+              }}
+              disabled={
+                !!currentSpeakerIndex &&
+                currentSpeakerIndex >= speakersOrdered.length
+              }
+            >
+              {currentSpeakerIndex === undefined ? "Start" : "Next"}
+            </Button>
+            <Card sx={{ flex: 1, p: 2, opacity: 0.4 }} elevation={3}>
+              <Stack>
+                <Typography variant="h6">Next Speaker</Typography>
+                <Typography variant="h3">
+                  {nextSpeaker || "No one yet"}
+                </Typography>
+              </Stack>
+            </Card>
+          </Stack>
+          <CountdownCard />
+          <Truck />
         </Stack>
-        <CountdownCard />
-      </Stack>
-      <Stack>
-        <Typography variant="h3">The truck</Typography>
       </Stack>
     </Stack>
   );
