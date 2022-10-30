@@ -13,27 +13,57 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { shuffle } from "./services/array";
 import CountdownCard from "./components/CountdownCard";
-import Speakers from "./components/Speakers";
+import Speakers from "components/Speakers";
 
+export interface Team {
+  id: string;
+  name: string;
+}
 export interface Worker {
   id: string;
   displayName: string;
   isEnabledByDefault: boolean;
+  teams: Team[];
 }
 
 const WORKERS: Worker[] = [
-  { id: uuidv4(), displayName: "Frederic", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Jorge", isEnabledByDefault: false },
-  { id: uuidv4(), displayName: "Maxime", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Mohamed", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Othmane", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Ramandeep", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Rodrigo", isEnabledByDefault: false },
-  { id: uuidv4(), displayName: "Samantha", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Yassine", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Yuliaa", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Imane", isEnabledByDefault: true },
-  { id: uuidv4(), displayName: "Richard", isEnabledByDefault: false },
+  {
+    id: uuidv4(),
+    displayName: "Frederic",
+    isEnabledByDefault: true,
+    teams: [],
+  },
+  { id: uuidv4(), displayName: "Jorge", isEnabledByDefault: false, teams: [] },
+  { id: uuidv4(), displayName: "Maxime", isEnabledByDefault: true, teams: [] },
+  { id: uuidv4(), displayName: "Mohamed", isEnabledByDefault: true, teams: [] },
+  { id: uuidv4(), displayName: "Othmane", isEnabledByDefault: true, teams: [] },
+  {
+    id: uuidv4(),
+    displayName: "Ramandeep",
+    isEnabledByDefault: true,
+    teams: [],
+  },
+  {
+    id: uuidv4(),
+    displayName: "Rodrigo",
+    isEnabledByDefault: false,
+    teams: [],
+  },
+  {
+    id: uuidv4(),
+    displayName: "Samantha",
+    isEnabledByDefault: true,
+    teams: [],
+  },
+  { id: uuidv4(), displayName: "Yassine", isEnabledByDefault: true, teams: [] },
+  { id: uuidv4(), displayName: "Yuliaa", isEnabledByDefault: true, teams: [] },
+  { id: uuidv4(), displayName: "Imane", isEnabledByDefault: true, teams: [] },
+  {
+    id: uuidv4(),
+    displayName: "Richard",
+    isEnabledByDefault: false,
+    teams: [],
+  },
 ];
 
 const App = () => {
@@ -103,26 +133,6 @@ const App = () => {
           <Typography>Ceremony</Typography>
         </Toolbar>
       </AppBar>
-      <Stack direction="row" gap={1}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setSpeakersOrdered(shuffle(WORKERS));
-            setCurrentSpeakerIndex(undefined);
-          }}
-        >
-          Shuffle speakers
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setCurrentSpeakerIndex(undefined);
-            setFilteredSpeakerIds([]);
-          }}
-        >
-          Reset
-        </Button>
-      </Stack>
       <Stack
         sx={{
           flexDirection: {
@@ -144,6 +154,14 @@ const App = () => {
           orderedSpeakers={speakersOrdered}
           excludedSpeakerIds={filteredSpeakerIds}
           onClickCheckbox={onClickToggleSpeaker}
+          onClickShuffle={() => {
+            setSpeakersOrdered(shuffle(WORKERS));
+            setCurrentSpeakerIndex(undefined);
+          }}
+          onClickCheckAll={() => {
+            setCurrentSpeakerIndex(undefined);
+            setFilteredSpeakerIds([]);
+          }}
         />
         <Stack gap={4} flex={1}>
           <Card sx={{ flex: 1, p: 2 }} elevation={3}>
@@ -189,6 +207,9 @@ const App = () => {
           </Card>
         </Stack>
         <CountdownCard />
+      </Stack>
+      <Stack>
+        <Typography variant="h3">The truck</Typography>
       </Stack>
     </Stack>
   );
