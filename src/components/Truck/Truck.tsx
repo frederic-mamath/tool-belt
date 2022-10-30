@@ -31,10 +31,7 @@ const Truck = (props: Props) => {
               <Typography variant="body1">CFCCON-A</Typography>
               <Typography variant="body2">Under construction</Typography>
             </TableCell>
-            <TableCell>
-              <div>CFCCON-B</div>
-              <div>Technical Workshop</div>
-            </TableCell>
+            <TableCell></TableCell>
             <TableCell>
               <div>CFCCON-B</div>
               <div>Technical Workshop</div>
