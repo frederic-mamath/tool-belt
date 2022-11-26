@@ -14,8 +14,6 @@ import {
   Stack,
   Tooltip,
 } from "@mui/material";
-import { useMachine } from "@xstate/react";
-import { dailyMachine } from "machines/dailyMachine";
 import { WORKERS, Worker } from "mocks/workers";
 import { append, without } from "ramda";
 import { MouseEventHandler, useState } from "react";
@@ -23,16 +21,13 @@ import { shuffle } from "services/array";
 
 import { getCheckedWorkers } from "./Speakers.service";
 
-interface Props {}
-
-const Speakers = (props: Props) => {
+const Speakers = () => {
   const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(
     shuffle(WORKERS)
   );
   const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>(
     getCheckedWorkers(WORKERS).map((worker) => worker.id)
   );
-  const [state] = useMachine(dailyMachine);
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null);
 
