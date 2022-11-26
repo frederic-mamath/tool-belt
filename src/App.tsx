@@ -14,19 +14,15 @@ import {
   PICK_PARTICIPANTS_STATE,
   dailyMachine,
 } from "machines/dailyMachine";
-import { WORKERS, Worker } from "mocks/workers";
+import { Worker } from "mocks/workers";
 import { useEffect, useState } from "react";
 
 import Speakers from "components/Speakers";
 import Truck from "components/Truck";
 
 import CountdownCard from "./components/CountdownCard";
-import { shuffle } from "./services/array";
 
 const App = () => {
-  const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(
-    shuffle(WORKERS)
-  );
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>();
   const [speakerTimer, setSpeakerTimer] = useState<{
     start: DateTime;
@@ -128,15 +124,15 @@ const App = () => {
                       setCurrentSpeakerIndex(0);
                       return;
                     }
-                    if (currentSpeakerIndex < speakersOrdered.length) {
-                      setCurrentSpeakerIndex(currentSpeakerIndex + 1);
-                      return;
-                    }
+                    // if (currentSpeakerIndex < speakersOrdered.length) {
+                    //   setCurrentSpeakerIndex(currentSpeakerIndex + 1);
+                    //   return;
+                    // }
                   }}
-                  disabled={
-                    !!currentSpeakerIndex &&
-                    currentSpeakerIndex >= speakersOrdered.length
-                  }
+                  // disabled={
+                  //   !!currentSpeakerIndex &&
+                  //   currentSpeakerIndex >= speakersOrdered.length
+                  // }
                 >
                   {currentSpeakerIndex === undefined ? "Start" : "Next"}
                 </Button>

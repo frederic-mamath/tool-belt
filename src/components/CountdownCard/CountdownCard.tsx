@@ -2,8 +2,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { Card, IconButton, Stack, Typography } from "@mui/material";
-import { DateTime, Duration } from "luxon";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import Countdown, { zeroPad } from "react-countdown";
 
 interface CustomCountdownRendererProps {
@@ -28,15 +27,9 @@ interface Props {}
 
 const CountdownCard = (props: Props) => {
   const countdownRef = useRef<Countdown>(null);
-  const [stopwatch, setStopwatch] = useState<Duration>();
 
   const {} = props;
 
-  const onClickReset = () => {
-    const timerSetup = {
-      start: DateTime.local(),
-    };
-  };
   const time = useMemo(() => {
     return Date.now() + 1000 * 60 * 15;
   }, []);
