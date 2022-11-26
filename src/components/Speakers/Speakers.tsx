@@ -16,24 +16,23 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { MouseEventHandler, useState } from "react";
 
-import { Worker } from "mocks/workers";
+import { Worker, WORKERS } from "mocks/workers";
+import { useMachine } from "@xstate/react";
+import { dailyMachine } from "machines/dailyMachine";
+import { shuffle } from "services/array";
+import { getCheckedWorkers } from "./Speakers.service";
+import { append, without } from "ramda";
 
-interface Props {
-  orderedSpeakers: Worker[];
-  excludedSpeakerIds: string[];
-  onClickCheckbox: (worker: Worker) => void;
-  onClickShuffle: VoidFunction;
-  onClickCheckAll: VoidFunction;
-}
+interface Props {}
 
 const Speakers = (props: Props) => {
-  const {
-    orderedSpeakers,
-    excludedSpeakerIds,
-    onClickCheckbox,
-    onClickShuffle,
-    onClickCheckAll,
-  } = props;
+  const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(
+    shuffle(WORKERS)
+  );
+  const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>(
+    getCheckedWorkers(WORKERS).map((worker) => worker.id)
+  );
+  const [state] = useMachine(dailyMachine);
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null);
 
@@ -45,11 +44,26 @@ const Speakers = (props: Props) => {
     setMenuAnchor(null);
   };
 
+  const onClickToggleSpeaker = (worker: Worker) => {
+    const currentIndex = filteredSpeakerIds.indexOf(worker.id);
+
+    if (currentIndex === -1) {
+      setFilteredSpeakerIds(append(worker.id, filteredSpeakerIds));
+      return;
+    }
+
+    setFilteredSpeakerIds(without([worker.id], filteredSpeakerIds));
+  };
+
+  const onShuffleSpeakers = () => {
+    setSpeakersOrdered(shuffle(WORKERS));
+  };
+
   return (
     <Card sx={{ maxWidth: 248, p: 2 }} elevation={3}>
       <Stack direction="row">
         <Tooltip title="Shuffle speakers">
-          <IconButton onClick={onClickShuffle}>
+          <IconButton onClick={onShuffleSpeakers}>
             <RefreshIcon />
           </IconButton>
         </Tooltip>
@@ -60,23 +74,29 @@ const Speakers = (props: Props) => {
         </Tooltip>
       </Stack>
       <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={onCloseMenu}>
-        <MenuItem onClick={onClickShuffle}>Shuffle</MenuItem>
-        <MenuItem onClick={onClickCheckAll}>Check all</MenuItem>
+        <MenuItem onClick={onShuffleSpeakers}>Shuffle</MenuItem>
+        <MenuItem
+          onClick={() => {
+            setFilteredSpeakerIds([]);
+          }}
+        >
+          Check all
+        </MenuItem>
         <MenuItem disabled>Uncheck all</MenuItem>
         <MenuItem disabled>Check by role</MenuItem>
       </Menu>
       <List>
-        {orderedSpeakers.map((worker) => (
+        {speakersOrdered.map((worker) => (
           <ListItem key={worker.id} sx={{ height: 40 }}>
             <ListItemButton
               disabled={worker.isOff}
-              onClick={() => onClickCheckbox(worker)}
+              onClick={() => onClickToggleSpeaker(worker)}
               dense
             >
               <ListItemIcon>
                 <Checkbox
                   edge="start"
-                  checked={!excludedSpeakerIds.includes(worker.id)}
+                  checked={!filteredSpeakerIds.includes(worker.id)}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ "aria-labelledby": worker.id }}

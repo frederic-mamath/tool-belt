@@ -16,7 +16,6 @@ export const WORKERS: Worker[] = [
     displayName: "Frederic",
     isEnabledByDefault: true,
     teams: [],
-    isOff: true,
   },
   { id: uuidv4(), displayName: "Jorge", isEnabledByDefault: false, teams: [] },
   { id: uuidv4(), displayName: "Maxime", isEnabledByDefault: true, teams: [] },
@@ -40,7 +39,7 @@ export const WORKERS: Worker[] = [
     isEnabledByDefault: true,
     teams: [],
   },
-  { id: uuidv4(), displayName: "Yassine", isEnabledByDefault: true, teams: [] },
+  // { id: uuidv4(), displayName: "Yassine", isEnabledByDefault: true, teams: [] },
   { id: uuidv4(), displayName: "Yuliaa", isEnabledByDefault: true, teams: [] },
   { id: uuidv4(), displayName: "Imane", isEnabledByDefault: true, teams: [] },
   {
