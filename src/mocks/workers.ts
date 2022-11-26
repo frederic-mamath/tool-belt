@@ -1,6 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-
 import { Team } from "mocks/teams";
+import { v4 as uuidv4 } from "uuid";
 
 export interface Worker {
   id: string;

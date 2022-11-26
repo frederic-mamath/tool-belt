@@ -1,3 +1,5 @@
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import {
   Card,
   Checkbox,
@@ -12,16 +14,14 @@ import {
   Stack,
   Tooltip,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { MouseEventHandler, useState } from "react";
-
-import { Worker, WORKERS } from "mocks/workers";
 import { useMachine } from "@xstate/react";
 import { dailyMachine } from "machines/dailyMachine";
-import { shuffle } from "services/array";
-import { getCheckedWorkers } from "./Speakers.service";
+import { WORKERS, Worker } from "mocks/workers";
 import { append, without } from "ramda";
+import { MouseEventHandler, useState } from "react";
+import { shuffle } from "services/array";
+
+import { getCheckedWorkers } from "./Speakers.service";
 
 interface Props {}
 

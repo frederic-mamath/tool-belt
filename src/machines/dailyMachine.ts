@@ -1,6 +1,5 @@
-import { createMachine } from "xstate";
-
 import { WORKERS, Worker } from "mocks/workers";
+import { createMachine } from "xstate";
 
 export const PICK_PARTICIPANTS_STATE = "PICK_PARTICIPANTS";
 export const ON_GOING_STATE = "ON_GOING";

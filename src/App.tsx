@@ -6,25 +6,22 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { append, without } from "ramda";
-import { DateTime, Duration } from "luxon";
 import { useMachine } from "@xstate/react";
-
-import { useEffect, useState } from "react";
-
-import { shuffle } from "./services/array";
-import CountdownCard from "./components/CountdownCard";
-
-import Truck from "components/Truck";
-import Speakers from "components/Speakers";
-
-import { WORKERS, Worker } from "mocks/workers";
+import { DateTime, Duration } from "luxon";
 import {
-  dailyMachine,
   NEXT_EVENT,
   ON_GOING_STATE,
   PICK_PARTICIPANTS_STATE,
+  dailyMachine,
 } from "machines/dailyMachine";
+import { WORKERS, Worker } from "mocks/workers";
+import { useEffect, useState } from "react";
+
+import Speakers from "components/Speakers";
+import Truck from "components/Truck";
+
+import CountdownCard from "./components/CountdownCard";
+import { shuffle } from "./services/array";
 
 const App = () => {
   const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(
