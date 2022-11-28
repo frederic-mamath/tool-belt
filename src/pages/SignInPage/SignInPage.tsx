@@ -1,9 +1,12 @@
-import { Button, Card, Stack, TextField, Typography } from "@mui/material";
+import { Button, Card, Stack, TextField, Typography } from '@mui/material'
 
-interface Props {}
+import Speakers from 'components/Speakers'
+import { useGetRecipes } from 'generated/hook'
 
-const SignInPage = (props: Props) => {
-  const {} = props;
+const SignInPage = () => {
+  const { data } = useGetRecipes()
+
+  console.log({ data, Speakers })
 
   return (
     <Stack>
@@ -14,7 +17,7 @@ const SignInPage = (props: Props) => {
         <Button>Sign in</Button>
       </Card>
     </Stack>
-  );
-};
+  )
+}
 
-export default SignInPage;
+export default SignInPage

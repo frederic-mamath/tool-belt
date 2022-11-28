@@ -34,7 +34,7 @@ export const pause = (stopwatch: Stopwatch): Stopwatch => {
   };
 };
 
-export const reset = (stopwatch: Stopwatch): Stopwatch => {
+export const reset = (): Stopwatch => {
   const now = DateTime.local();
 
   return {

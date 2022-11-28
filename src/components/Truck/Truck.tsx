@@ -1,17 +1,6 @@
-import {
-  Stack,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableCell,
-  Typography,
-} from "@mui/material";
+import { Stack, Table, TableHead, TableRow, TableBody, TableCell, Typography } from '@mui/material'
 
-interface Props {}
-
-const Truck = (props: Props) => {
-  const {} = props;
+const Truck = () => {
 
   return (
     <Stack maxWidth={512}>
@@ -40,7 +29,7 @@ const Truck = (props: Props) => {
           <TableRow>
             <TableCell>Off</TableCell>
             <TableCell>Checking</TableCell>
-            <TableCell>What's</TableCell>
+            <TableCell>What&apos;s</TableCell>
             <TableCell>Possible to do</TableCell>
           </TableRow>
           <TableRow>
@@ -58,7 +47,7 @@ const Truck = (props: Props) => {
         </TableBody>
       </Table>
     </Stack>
-  );
-};
+  )
+}
 
-export default Truck;
+export default Truck

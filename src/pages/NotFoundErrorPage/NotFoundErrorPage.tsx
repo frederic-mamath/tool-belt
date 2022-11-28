@@ -1,9 +1,5 @@
-interface Props {}
+const NotFoundErrorPage = () => {
+  return <div>Page not found</div>
+}
 
-const NotFoundErrorPage = (props: Props) => {
-  const {} = props;
-
-  return <div>Page not found</div>;
-};
-
-export default NotFoundErrorPage;
+export default NotFoundErrorPage
