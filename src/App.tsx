@@ -18,7 +18,6 @@ import { Worker } from "mocks/workers";
 import { useEffect, useState } from "react";
 
 import Speakers from "components/Speakers";
-import Truck from "components/Truck";
 
 import CountdownCard from "./components/CountdownCard";
 
@@ -54,7 +53,7 @@ const App = () => {
   // const filteredSpeakers = speakersOrdered.filter(
   //   (worker) => !filteredSpeakerIds.includes(worker.id)
   // );
-  const filteredSpeakers: Worker[] = [];
+  const filteredSpeakers: Worker[] = state.context.validatedSpeakers;
 
   const currentSpeaker =
     currentSpeakerIndex !== undefined
@@ -65,6 +64,11 @@ const App = () => {
       ? filteredSpeakers[currentSpeakerIndex + 1]?.displayName || "Let's Go !"
       : "No one yet";
 
+  const onStartDaily = (workers: Worker[]) => {
+    send(NEXT_EVENT, { validatedSpeakers: workers });
+  };
+
+  console.log({ state });
   return (
     <Stack gap={4}>
       <AppBar position="sticky">
@@ -87,15 +91,10 @@ const App = () => {
         }}
         justifyContent="center"
       >
-        <Button
-          onClick={() => {
-            send(NEXT_EVENT);
-          }}
-        >
-          Next
-        </Button>
         <Stack direction="row" gap={4}>
-          {state.matches(PICK_PARTICIPANTS_STATE) && <Speakers />}
+          {state.matches(PICK_PARTICIPANTS_STATE) && (
+            <Speakers onStart={onStartDaily} />
+          )}
           {state.matches(ON_GOING_STATE) && (
             <>
               <Stack gap={4} flex={1}>
@@ -124,15 +123,15 @@ const App = () => {
                       setCurrentSpeakerIndex(0);
                       return;
                     }
-                    // if (currentSpeakerIndex < speakersOrdered.length) {
-                    //   setCurrentSpeakerIndex(currentSpeakerIndex + 1);
-                    //   return;
-                    // }
+                    if (currentSpeakerIndex < filteredSpeakers.length) {
+                      setCurrentSpeakerIndex(currentSpeakerIndex + 1);
+                      return;
+                    }
                   }}
-                  // disabled={
-                  //   !!currentSpeakerIndex &&
-                  //   currentSpeakerIndex >= speakersOrdered.length
-                  // }
+                  disabled={
+                    !!currentSpeakerIndex &&
+                    currentSpeakerIndex >= filteredSpeakers.length
+                  }
                 >
                   {currentSpeakerIndex === undefined ? "Start" : "Next"}
                 </Button>
@@ -149,7 +148,7 @@ const App = () => {
             </>
           )}
 
-          <Truck />
+          {/* <Truck /> */}
         </Stack>
       </Stack>
     </Stack>

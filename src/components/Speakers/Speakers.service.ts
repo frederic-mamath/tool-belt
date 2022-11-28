@@ -13,3 +13,10 @@ export const getCheckedWorkers = (workers: Worker[]) => {
     return false;
   });
 };
+
+export const getFilteredSpeakers = (
+  workers: Worker[],
+  filteredWorkerIds: string[]
+) => {
+  return workers.filter((worker) => !filteredWorkerIds.includes(worker.id));
+};
