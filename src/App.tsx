@@ -15,11 +15,22 @@ import {
   dailyMachine,
 } from "machines/dailyMachine";
 import { Worker } from "mocks/workers";
+import NotFoundErrorPage from "pages/NotFoundErrorPage";
+import SignInPage from "pages/SignInPage";
 import { useEffect, useState } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import Speakers from "components/Speakers";
 
 import CountdownCard from "./components/CountdownCard";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <SignInPage />,
+    errorElement: <NotFoundErrorPage />,
+  },
+]);
 
 const App = () => {
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>();
@@ -78,6 +89,7 @@ const App = () => {
           <Typography>Ceremony</Typography>
         </Toolbar>
       </AppBar>
+      <RouterProvider router={router} />
       <Stack
         sx={{
           p: {
