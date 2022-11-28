@@ -1,7 +1,7 @@
 import { AppBar, Stack, Toolbar, Typography } from '@mui/material'
+import { SnackbarProvider } from "notistack";
 import { QueryClientProvider } from "react-query";
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-
 
 import DailyPage from 'pages/DailyPage/DailyPage'
 import NotFoundErrorPage from 'pages/NotFoundErrorPage'
@@ -23,6 +23,7 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
+      <SnackbarProvider maxSnack={3}>
     <Stack gap={4}>
       <AppBar position="sticky">
         <Toolbar sx={{ gap: 2 }}>
@@ -33,6 +34,7 @@ const App = () => {
       </AppBar>
       <RouterProvider router={router} />
     </Stack>
+    </SnackbarProvider>
     </QueryClientProvider>
   )
 }
