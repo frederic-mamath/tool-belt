@@ -87,7 +87,7 @@ const Speakers = (props: Props) => {
         <MenuItem disabled>Uncheck all</MenuItem>
         <MenuItem disabled>Check by role</MenuItem>
       </Menu>
-      <Stack direction="row">
+      <Stack direction={{ sm: "column", md: "row" }}>
         <List
           subheader={
             <ListSubheader component="div" id="nested-list-subheader">

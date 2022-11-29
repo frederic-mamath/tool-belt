@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { enqueueSnackbar } from "notistack";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "";
@@ -13,7 +13,19 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (401 === error.response.status) {
+    const axiosError = error as AxiosError;
+
+    if (!axiosError) {
+      return;
+    }
+
+    if (!axiosError.response) return;
+
+    if (401 === axiosError.response.status) {
+      if (axiosError.config?.url?.match(/users\/me/gm)) {
+        return;
+      }
+
       enqueueSnackbar("Unauthorized", { variant: "error" });
       window.location.href = "/";
     }

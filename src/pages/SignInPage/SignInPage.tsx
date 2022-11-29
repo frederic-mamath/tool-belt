@@ -1,9 +1,10 @@
 import { Button, Card, Stack, TextField, Typography } from '@mui/material'
 import { useAuthenticationCtx } from 'contexts/authenticationCtx';
 import { useSnackbar } from 'notistack';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
+import { getConnectedUser } from 'generated/hook';
 import { axiosClient } from "services/network";
 
 
@@ -12,6 +13,20 @@ const SignInPage = () => {
   const navigate = useNavigate()
   const authenticationCtx = useAuthenticationCtx()
 
+  useEffect(() => {
+    getConnectedUser()
+      .then(response => {
+        authenticationCtx.setIsAuthenticated(true);
+        authenticationCtx.setConnectedUser(response);
+      }
+   )
+  }, [])
+
+  useEffect(() => {
+    if (authenticationCtx.isAuthenticated) {
+      navigate("/daily")
+    }
+  }, [authenticationCtx.isAuthenticated])
   const onSubmit = async () => {
     const formData = new FormData();
 
@@ -28,9 +43,8 @@ const SignInPage = () => {
       enqueueSnackbar("You are signed in !", { variant: "success"})
       authenticationCtx.setIsAuthenticated(true);
       authenticationCtx.setConnectedUser({
-        clearstreamId: "vd242",
         email: "frederic.mamath@gmail.com",
-        firstName: "Frederic"
+        isClearstreamUser: false
       })
       navigate("/daily")
       

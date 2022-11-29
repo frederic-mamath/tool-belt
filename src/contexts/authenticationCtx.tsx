@@ -1,13 +1,13 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
-import { ClearstreamUserOutboundDto } from "generated/model";
+import { ConnectedUserOutboundDto } from "generated/model";
 import { notImplemented } from "services/context";
 
 interface AuthenticationContext {
   isAuthenticated: boolean;
-  connectedUser?: ClearstreamUserOutboundDto;
+  connectedUser?: ConnectedUserOutboundDto;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  setConnectedUser: React.Dispatch<React.SetStateAction<ClearstreamUserOutboundDto | undefined>>;
+  setConnectedUser: React.Dispatch<React.SetStateAction<ConnectedUserOutboundDto | undefined>>;
 }
 
 export const AuthenticationCtx = createContext<AuthenticationContext>({
@@ -25,7 +25,7 @@ interface Props {
 export const AuthenticationCtxProvider = (props: Props) => {
   const { children } = props
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [connectedUser, setConnectedUser] = useState<ClearstreamUserOutboundDto>()
+  const [connectedUser, setConnectedUser] = useState<ConnectedUserOutboundDto>()
 
   return <AuthenticationCtx.Provider value={{
     isAuthenticated,

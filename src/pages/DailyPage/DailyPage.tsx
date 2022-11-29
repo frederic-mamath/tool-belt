@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 import CountdownCard from "components/CountdownCard";
 import Speakers from "components/Speakers";
-import { useGetBookings } from "generated/hook";
+import { useGetClearstreamUsers } from "generated/hook";
 import { Worker } from "mocks/workers";
 
 const getCurrentSpeaker = ( filteredSpeakers: Worker[], currentSpeakerIndex?: number,) => {
@@ -24,8 +24,8 @@ const getNextSpeaker = ( filteredSpeakers: Worker[], currentSpeakerIndex?: numbe
 
 const DailyPage = () => {
   const [state, send] = useMachine(dailyMachine)
-  const getBookings = useGetBookings()
-  console.log({ getBookings})
+  const getClearstreamUsers = useGetClearstreamUsers()
+  console.log({ getClearstreamUsers})
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>()
   const [speakerTimer, setSpeakerTimer] = useState<{
     start: DateTime
