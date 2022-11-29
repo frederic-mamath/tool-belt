@@ -8,17 +8,17 @@ import { useEffect, useState } from "react";
 import CountdownCard from "components/CountdownCard";
 import Speakers from "components/Speakers";
 import { useGetClearstreamUsers } from "generated/hook";
-import { Worker } from "mocks/workers";
+import { ClearstreamUserOutboundDto } from "generated/model";
 
-const getCurrentSpeaker = ( filteredSpeakers: Worker[], currentSpeakerIndex?: number,) => {
+const getCurrentSpeaker = ( filteredSpeakers: ClearstreamUserOutboundDto[], currentSpeakerIndex?: number,) => {
   return currentSpeakerIndex !== undefined
-    ? filteredSpeakers[currentSpeakerIndex]?.displayName || 'Done !'
+    ? filteredSpeakers[currentSpeakerIndex]?.firstName || 'Done !'
     : 'No one yet'
 }
 
-const getNextSpeaker = ( filteredSpeakers: Worker[], currentSpeakerIndex?: number,) => {
+const getNextSpeaker = ( filteredSpeakers: ClearstreamUserOutboundDto[], currentSpeakerIndex?: number,) => {
   return currentSpeakerIndex !== undefined
-  ? filteredSpeakers[currentSpeakerIndex + 1]?.displayName || "Let's Go !"
+  ? filteredSpeakers[currentSpeakerIndex + 1]?.firstName || "Let's Go !"
   : 'No one yet'
 }
 
@@ -32,12 +32,12 @@ const DailyPage = () => {
     now: DateTime
     tick: null
   } | null>(null)
-  const filteredSpeakers: Worker[] = state.context.validatedSpeakers
+  const filteredSpeakers: ClearstreamUserOutboundDto[] = state.context.validatedSpeakers
 
   const currentSpeaker = getCurrentSpeaker(filteredSpeakers, currentSpeakerIndex);
 const nextSpeaker = getNextSpeaker(filteredSpeakers, currentSpeakerIndex);
 
-    const onStartDaily = (workers: Worker[]) => {
+    const onStartDaily = (workers: ClearstreamUserOutboundDto[]) => {
       send(NEXT_EVENT, { validatedSpeakers: workers })
     }
 

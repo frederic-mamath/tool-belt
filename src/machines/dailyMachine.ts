@@ -1,6 +1,6 @@
 import { assign, createMachine } from "xstate";
 
-import { WORKERS, Worker } from "mocks/workers";
+import { ClearstreamUserOutboundDto } from "generated/model";
 
 export const PICK_PARTICIPANTS_STATE = "PICK_PARTICIPANTS";
 export const ON_GOING_STATE = "ON_GOING";
@@ -12,15 +12,15 @@ export const QUESTION_EVENT = "QUESTION";
 export const RESUME_EVENT = "RESUME";
 
 interface DailyMachineContext {
-  users: Worker[];
-  orderedSpeakers: Worker[];
-  validatedSpeakers: Worker[];
+  users: ClearstreamUserOutboundDto[];
+  orderedSpeakers: ClearstreamUserOutboundDto[];
+  validatedSpeakers: ClearstreamUserOutboundDto[];
   currentSpeakerId: string | null;
   nextSpeakerId: string | null;
 }
 
 type DailyMachineEvents =
-  | { type: typeof NEXT_EVENT; validatedSpeakers: Worker[] }
+  | { type: typeof NEXT_EVENT; validatedSpeakers: ClearstreamUserOutboundDto[] }
   | { type: typeof QUESTION_EVENT }
   | { type: typeof RESUME_EVENT };
 
@@ -30,7 +30,7 @@ export const dailyMachine = createMachine(
     id: "daily",
     initial: PICK_PARTICIPANTS_STATE,
     context: {
-      users: WORKERS,
+      users: [],
       orderedSpeakers: [],
       validatedSpeakers: [],
       currentSpeakerId: null,

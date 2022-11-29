@@ -16,24 +16,34 @@ import {
   Stack,
   Tooltip,
 } from '@mui/material'
-import { append, without } from 'ramda'
+import { append, groupBy, without } from 'ramda'
 import { MouseEventHandler, useState } from 'react'
 
-import { PRODUCT_WORKERS, QA_WORKERS, TECH_WORKERS, WORKERS, Worker } from 'mocks/workers'
+import { useGetClearstreamUsers } from 'generated/hook'
+import { ClearstreamUserOutboundDto } from 'generated/model'
 import { shuffle } from 'services/array'
 
 import { getCheckedWorkers, getFilteredSpeakers } from './Speakers.service'
 
 interface Props {
-  onStart: (workers: Worker[]) => void
+  onStart: (workers: ClearstreamUserOutboundDto[]) => void
 }
+
+const mapByClearstreamUserCategory = groupBy((clearstreamUserOutboundDto: ClearstreamUserOutboundDto) => {
+  return clearstreamUserOutboundDto.clearstreamUserCategory || "other";
+});
+
 
 const Speakers = (props: Props) => {
   const { onStart } = props
-  const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(shuffle(WORKERS))
+  const getClearstreamUsers = useGetClearstreamUsers()
+  const clearstreamUsers = getClearstreamUsers.data || []
+  const clearstreamUsersById = mapByClearstreamUserCategory(clearstreamUsers);
+  const [speakersOrdered, setSpeakersOrdered] = useState<ClearstreamUserOutboundDto[]>(shuffle(clearstreamUsers))
   const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>(
-    getCheckedWorkers(WORKERS).map((worker) => worker.id)
+    getCheckedWorkers(speakersOrdered).map((clearstreamUserOutboundDto) => clearstreamUserOutboundDto.id)
   )
+  const [] = useState({})
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null)
 
@@ -45,20 +55,20 @@ const Speakers = (props: Props) => {
     setMenuAnchor(null)
   }
 
-  const onClickToggleSpeaker = (worker: Worker) => {
-    const currentIndex = filteredSpeakerIds.indexOf(worker.id)
+  const onClickToggleSpeaker = (clearstreamUserOutboundDto: ClearstreamUserOutboundDto) => {
+    const currentIndex = filteredSpeakerIds.indexOf(clearstreamUserOutboundDto.id)
 
     if (currentIndex === -1) {
-      setFilteredSpeakerIds(append(worker.id, filteredSpeakerIds))
+      setFilteredSpeakerIds(append(clearstreamUserOutboundDto.id, filteredSpeakerIds))
 
       return
     }
 
-    setFilteredSpeakerIds(without([worker.id], filteredSpeakerIds))
+    setFilteredSpeakerIds(without([clearstreamUserOutboundDto.id], filteredSpeakerIds))
   }
 
   const onShuffleSpeakers = () => {
-    setSpeakersOrdered(shuffle(WORKERS))
+    setSpeakersOrdered(shuffle(clearstreamUsers))
   }
 
   return (
@@ -88,78 +98,34 @@ const Speakers = (props: Props) => {
         <MenuItem disabled>Check by role</MenuItem>
       </Menu>
       <Stack direction={{ sm: "column", md: "row" }}>
-        <List
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Tech Team
-            </ListSubheader>
-          }
-        >
-          {TECH_WORKERS.map((worker) => (
-            <ListItem key={worker.id} sx={{ height: 40 }}>
-              <ListItemButton disabled={worker.isOff} onClick={() => onClickToggleSpeaker(worker)} dense>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={!filteredSpeakerIds.includes(worker.id)}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': worker.id }}
-                  />
-                </ListItemIcon>
-                <ListItemText id={worker.id} primary={worker.displayName} />
-              </ListItemButton>
-            </ListItem>
+      {Object.keys(clearstreamUsersById).map(clearstreamUserCategory => (
+            <List
+            key={`daily-clearstream-user-category-${clearstreamUserCategory}`}
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                {clearstreamUserCategory}
+              </ListSubheader>
+            }
+          >
+          {clearstreamUsersById[clearstreamUserCategory].map(clearstreamUser => (
+            <ListItem key={clearstreamUser.id} sx={{ height: 40 }}>
+            <ListItemButton disabled={clearstreamUser.isOff} onClick={() => onClickToggleSpeaker(clearstreamUser)} dense>
+              <ListItemIcon>
+                <Checkbox
+                  edge="start"
+                  checked={!filteredSpeakerIds.includes(clearstreamUser.id)}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{ 'aria-labelledby': clearstreamUser.id }}
+                />
+              </ListItemIcon>
+              <ListItemText id={clearstreamUser.id} primary={clearstreamUser.firstName || "unknown"} />
+            </ListItemButton>
+          </ListItem>
           ))}
-        </List>
-        <List
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              QA Team
-            </ListSubheader>
-          }
-        >
-          {QA_WORKERS.map((worker) => (
-            <ListItem key={worker.id} sx={{ height: 40 }}>
-              <ListItemButton disabled={worker.isOff} onClick={() => onClickToggleSpeaker(worker)} dense>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={!filteredSpeakerIds.includes(worker.id)}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': worker.id }}
-                  />
-                </ListItemIcon>
-                <ListItemText id={worker.id} primary={worker.displayName} />
-              </ListItemButton>
-            </ListItem>
+
+            </List>
           ))}
-        </List>
-        <List
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Product Team
-            </ListSubheader>
-          }
-        >
-          {PRODUCT_WORKERS.map((worker) => (
-            <ListItem key={worker.id} sx={{ height: 40 }}>
-              <ListItemButton disabled={worker.isOff} onClick={() => onClickToggleSpeaker(worker)} dense>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={!filteredSpeakerIds.includes(worker.id)}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': worker.id }}
-                  />
-                </ListItemIcon>
-                <ListItemText id={worker.id} primary={worker.displayName} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </Stack>
       <Button
         onClick={() => onStart(getFilteredSpeakers(speakersOrdered, filteredSpeakerIds))}
