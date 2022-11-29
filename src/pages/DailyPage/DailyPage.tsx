@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 
 import CountdownCard from "components/CountdownCard";
 import Speakers from "components/Speakers";
-import { useGetClearstreamUsers } from "generated/hook";
 import { ClearstreamUserOutboundDto } from "generated/model";
 
 const getCurrentSpeaker = ( filteredSpeakers: ClearstreamUserOutboundDto[], currentSpeakerIndex?: number,) => {
@@ -24,8 +23,6 @@ const getNextSpeaker = ( filteredSpeakers: ClearstreamUserOutboundDto[], current
 
 const DailyPage = () => {
   const [state, send] = useMachine(dailyMachine)
-  const getClearstreamUsers = useGetClearstreamUsers()
-  console.log({ getClearstreamUsers})
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>()
   const [speakerTimer, setSpeakerTimer] = useState<{
     start: DateTime
@@ -37,8 +34,8 @@ const DailyPage = () => {
   const currentSpeaker = getCurrentSpeaker(filteredSpeakers, currentSpeakerIndex);
 const nextSpeaker = getNextSpeaker(filteredSpeakers, currentSpeakerIndex);
 
-    const onStartDaily = (workers: ClearstreamUserOutboundDto[]) => {
-      send(NEXT_EVENT, { validatedSpeakers: workers })
+    const onStartDaily = (shuffledAndFilteredUsers: ClearstreamUserOutboundDto[]) => {
+      send(NEXT_EVENT, { validatedSpeakers: shuffledAndFilteredUsers })
     }
 
   const stopwatch = speakerTimer

@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from '@mui/material'
 import { append, groupBy, without } from 'ramda'
-import { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 
 import { useGetClearstreamUsers } from 'generated/hook'
 import { ClearstreamUserOutboundDto } from 'generated/model'
@@ -38,13 +38,18 @@ const Speakers = (props: Props) => {
   const { onStart } = props
   const getClearstreamUsers = useGetClearstreamUsers()
   const clearstreamUsers = getClearstreamUsers.data || []
-  const clearstreamUsersById = mapByClearstreamUserCategory(clearstreamUsers);
+  const [clearstreamUsersById, setClearstreamUsersById] = useState<{ [categoryId: string]: ClearstreamUserOutboundDto[] }>({});
   const [speakersOrdered, setSpeakersOrdered] = useState<ClearstreamUserOutboundDto[]>(shuffle(clearstreamUsers))
   const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>(
     getCheckedWorkers(speakersOrdered).map((clearstreamUserOutboundDto) => clearstreamUserOutboundDto.id)
   )
-  const [] = useState({})
 
+  useEffect(() => {
+    if (clearstreamUsers.length > 0) {
+      setClearstreamUsersById(mapByClearstreamUserCategory(clearstreamUsers))
+      setSpeakersOrdered(clearstreamUsers)
+    }
+  }, [clearstreamUsers])
   const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null)
 
   const onClickMore: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -128,7 +133,7 @@ const Speakers = (props: Props) => {
           ))}
       </Stack>
       <Button
-        onClick={() => onStart(getFilteredSpeakers(speakersOrdered, filteredSpeakerIds))}
+        onClick={() => onStart(shuffle(getFilteredSpeakers(speakersOrdered, filteredSpeakerIds)))}
         variant="contained"
         sx={{ width: '100%' }}
       >

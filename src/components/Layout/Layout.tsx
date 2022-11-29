@@ -15,12 +15,10 @@ const Layout = (props: Props) => {
   const authenticationCtx = useAuthenticationCtx()
 
   const onLogout = async () => {
-    const response = await axiosClient({
+    await axiosClient({
       method: "post",
       url: "/api/logout"
     })
-
-    console.log({ response })
   }
 
   return (

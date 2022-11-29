@@ -35,7 +35,11 @@ axiosClient.interceptors.response.use(
 export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
   const source = axios.CancelToken.source();
   const promise = axiosClient({ ...config, cancelToken: source.token }).then(
-    ({ data }) => data
+    (response) => {
+      const { data } = response;
+
+      return data
+    }
   );
 
   // eslint-disable-next-line
