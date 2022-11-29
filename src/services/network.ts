@@ -15,6 +15,7 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (401 === error.response.status) {
       enqueueSnackbar("Unauthorized", { variant: "error" });
+      window.location.href = "/";
     }
   }
 );

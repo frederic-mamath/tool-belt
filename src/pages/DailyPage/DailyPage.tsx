@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import CountdownCard from "components/CountdownCard";
 import Speakers from "components/Speakers";
+import { useGetBookings } from "generated/hook";
 import { Worker } from "mocks/workers";
 
 const getCurrentSpeaker = ( filteredSpeakers: Worker[], currentSpeakerIndex?: number,) => {
@@ -23,6 +24,8 @@ const getNextSpeaker = ( filteredSpeakers: Worker[], currentSpeakerIndex?: numbe
 
 const DailyPage = () => {
   const [state, send] = useMachine(dailyMachine)
+  const getBookings = useGetBookings()
+  console.log({ getBookings})
   const [currentSpeakerIndex, setCurrentSpeakerIndex] = useState<number>()
   const [speakerTimer, setSpeakerTimer] = useState<{
     start: DateTime
@@ -38,7 +41,6 @@ const nextSpeaker = getNextSpeaker(filteredSpeakers, currentSpeakerIndex);
       send(NEXT_EVENT, { validatedSpeakers: workers })
     }
 
-  console.log({ state })
   const stopwatch = speakerTimer
     ? Duration.fromObject(speakerTimer.now.diff(speakerTimer.start).toObject()).toFormat('hh:mm:ss')
     : '00:00:00'

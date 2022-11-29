@@ -1,18 +1,16 @@
 import { Button, Card, Stack, TextField, Typography } from '@mui/material'
+import { useAuthenticationCtx } from 'contexts/authenticationCtx';
 import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 
 
-import Speakers from 'components/Speakers'
-import { useGetBookings, useGetRecipes } from 'generated/hook'
 import { axiosClient } from "services/network";
 
 
 const SignInPage = () => {
-  const { data: recipesData } = useGetRecipes()
-  const { data: bookingData } = useGetBookings()
   const { enqueueSnackbar } = useSnackbar()
-
-  console.log({ bookingData, recipesData, Speakers })
+  const navigate = useNavigate()
+  const authenticationCtx = useAuthenticationCtx()
 
   const onSubmit = async () => {
     const formData = new FormData();
@@ -28,6 +26,13 @@ const SignInPage = () => {
 
     if (response.status === 200) {
       enqueueSnackbar("You are signed in !", { variant: "success"})
+      authenticationCtx.setIsAuthenticated(true);
+      authenticationCtx.setConnectedUser({
+        clearstreamId: "vd242",
+        email: "frederic.mamath@gmail.com",
+        firstName: "Frederic"
+      })
+      navigate("/daily")
       
 return;
     }
