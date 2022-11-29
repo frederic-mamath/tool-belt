@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
+import { getConnectedUser } from "generated/hook";
 import { ConnectedUserOutboundDto } from "generated/model";
 import { notImplemented } from "services/context";
 
@@ -27,6 +28,15 @@ export const AuthenticationCtxProvider = (props: Props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [connectedUser, setConnectedUser] = useState<ConnectedUserOutboundDto>()
 
+  useEffect(() => {
+    getConnectedUser()
+      .then(connectedUserOutboundDto => {
+        setIsAuthenticated(true);
+        setConnectedUser(connectedUserOutboundDto);
+      }
+   )
+  }, [])
+  
   return <AuthenticationCtx.Provider value={{
     isAuthenticated,
     connectedUser,

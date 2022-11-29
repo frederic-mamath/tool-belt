@@ -4,23 +4,12 @@ import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { getConnectedUser } from 'generated/hook';
 import { axiosClient } from "services/network";
-
 
 const SignInPage = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const authenticationCtx = useAuthenticationCtx()
-
-  useEffect(() => {
-    getConnectedUser()
-      .then(response => {
-        authenticationCtx.setIsAuthenticated(true);
-        authenticationCtx.setConnectedUser(response);
-      }
-   )
-  }, [])
 
   useEffect(() => {
     if (authenticationCtx.isAuthenticated) {

@@ -8,6 +8,7 @@
 export interface ClearstreamUserOutboundDto {
   clearstreamId?: string;
   email?: string;
+  clearstreamUserCategory?: string;
   firstName?: string;
   lastName?: string;
 }
