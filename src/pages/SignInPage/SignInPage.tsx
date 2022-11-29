@@ -2,25 +2,34 @@ import { Button, Card, Stack, TextField, Typography } from '@mui/material'
 import { useAuthenticationCtx } from 'contexts/authenticationCtx';
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import { axiosClient } from "services/network";
+
+interface FormValues {
+  email: string;
+  password: string;
+}
 
 const SignInPage = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
   const authenticationCtx = useAuthenticationCtx()
+  const { register, handleSubmit } = useForm<FormValues>()
 
   useEffect(() => {
     if (authenticationCtx.isAuthenticated) {
       navigate("/daily")
     }
   }, [authenticationCtx.isAuthenticated])
-  const onSubmit = async () => {
+  const onSubmit = async (values: FormValues) => {
+    const { email, password } = values
+
     const formData = new FormData();
 
-    formData.append("email", "frederic.mamath@gmail.com")
-    formData.append("password", "testtest")
+    formData.append("email", email)
+    formData.append("password", password)
 
     const response = await axiosClient({
       method: "post",
@@ -28,6 +37,10 @@ const SignInPage = () => {
       data: formData
     })
 
+    if (!response) {
+      return;
+    }
+    
     if (response.status === 200) {
       enqueueSnackbar("You are signed in !", { variant: "success"})
       authenticationCtx.setIsAuthenticated(true);
@@ -37,7 +50,7 @@ const SignInPage = () => {
       })
       navigate("/daily")
       
-return;
+      return;
     }
   };
 
@@ -45,9 +58,11 @@ return;
     <Stack>
       <Typography variant="h2">Sign in</Typography>
       <Card>
-        <TextField label="username" />
-        <TextField label="password" type="password" />
-        <Button onClick={onSubmit}>Sign in</Button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+        <TextField label="username" {...register("email")} />
+        <TextField label="password" {...register("password")} type="password" />
+        <Button type="submit">Sign in</Button>
+        </form>
       </Card>
     </Stack>
   )

@@ -22,6 +22,11 @@ axiosClient.interceptors.response.use(
     if (!axiosError.response) return;
 
     if (401 === axiosError.response.status) {
+      if (axiosError.config?.url?.match(/api\/login/gm)) {
+        enqueueSnackbar("Invalid credentials", { variant: "error" });
+
+        return;
+      }
       if (axiosError.config?.url?.match(/users\/me/gm)) {
         return;
       }
