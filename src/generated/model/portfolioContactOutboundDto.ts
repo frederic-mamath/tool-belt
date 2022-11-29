@@ -6,6 +6,6 @@
  */
 
 export interface PortfolioContactOutboundDto {
-  contactsInQueueCount?: number
-  contactsLeftBeforeEndOfMonth?: number
+  contactsInQueueCount?: number;
+  contactsLeftBeforeEndOfMonth?: number;
 }

@@ -6,7 +6,7 @@
  */
 
 export interface RestaurantOutboundDto {
-  id?: string
-  name?: string
-  availableSeatCount?: number
+  id?: string;
+  name?: string;
+  availableSeatCount?: number;
 }

@@ -6,8 +6,8 @@
  */
 
 export interface PhilipsHueLightInboundDto {
-  id: number
-  brightness?: number
-  contrast?: number
-  on: boolean
+  id: number;
+  brightness?: number;
+  contrast?: number;
+  on: boolean;
 }

@@ -6,9 +6,9 @@
  */
 
 export interface Restaurant {
-  id: string
-  name: string
-  availableSeatCount: number
-  createdAt: string
-  updatedAt: string
+  id: string;
+  name: string;
+  availableSeatCount: number;
+  createdAt: string;
+  updatedAt: string;
 }

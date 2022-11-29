@@ -4,10 +4,10 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { UserInBookingInboundDto } from './userInBookingInboundDto'
+import type { UserInBookingInboundDto } from './userInBookingInboundDto';
 
 export interface BookingInboundDto {
-  userInBookingInboundDto?: UserInBookingInboundDto
-  restaurantId?: string
-  bookedSeatCount?: number
+  userInBookingInboundDto?: UserInBookingInboundDto;
+  restaurantId?: string;
+  bookedSeatCount?: number;
 }

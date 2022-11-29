@@ -6,7 +6,7 @@
  */
 
 export interface PortfolioContactInboundDto {
-  displayName: string
-  fromEmail?: string
-  contentAsText: string
+  displayName: string;
+  fromEmail?: string;
+  contentAsText: string;
 }

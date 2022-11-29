@@ -6,8 +6,8 @@
  */
 
 export interface EmailInboundDto {
-  fromEmail?: string
-  toEmail?: string
-  subject?: string
-  body?: string
+  fromEmail?: string;
+  toEmail?: string;
+  subject?: string;
+  body?: string;
 }

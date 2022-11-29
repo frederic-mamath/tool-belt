@@ -18,3 +18,4 @@ export * from './philipsHueLightOutboundDto'
 export * from './createRecipeInboundDto'
 export * from './restaurantOutboundDto'
 export * from './recipeOutboundDto'
+export * from './connectedUserOutboundDto';

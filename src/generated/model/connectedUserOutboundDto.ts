@@ -5,7 +5,7 @@
  * OpenAPI spec version: v0
  */
 
-export interface BookingOutboundDto {
-  restaurantId?: string;
-  bookedSeatCount?: number;
+export interface ConnectedUserOutboundDto {
+  email: string;
+  isClearstreamUser: boolean;
 }

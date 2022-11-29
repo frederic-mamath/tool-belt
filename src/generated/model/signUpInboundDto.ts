@@ -6,6 +6,6 @@
  */
 
 export interface SignUpInboundDto {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }

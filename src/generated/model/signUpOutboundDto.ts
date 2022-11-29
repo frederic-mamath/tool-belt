@@ -6,5 +6,5 @@
  */
 
 export interface SignUpOutboundDto {
-  email: string
+  email: string;
 }

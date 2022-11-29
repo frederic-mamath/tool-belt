@@ -6,13 +6,13 @@
  */
 
 export interface RecipeOutboundDto {
-  id?: string
-  name?: string
-  pictureUrl?: string
-  servingCount?: number
-  preparationDurationInMillis?: number
-  restDurationInMillis?: number
-  cookingDurationInMillis?: number
-  instructions?: string[]
-  ingredients?: string[]
+  id?: string;
+  name?: string;
+  pictureUrl?: string;
+  servingCount?: number;
+  preparationDurationInMillis?: number;
+  restDurationInMillis?: number;
+  cookingDurationInMillis?: number;
+  instructions?: string[];
+  ingredients?: string[];
 }

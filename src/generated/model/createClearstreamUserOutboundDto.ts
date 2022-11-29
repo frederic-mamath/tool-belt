@@ -6,6 +6,6 @@
  */
 
 export interface CreateClearstreamUserOutboundDto {
-  clearstreamId?: string
-  email?: string
+  clearstreamId?: string;
+  email?: string;
 }

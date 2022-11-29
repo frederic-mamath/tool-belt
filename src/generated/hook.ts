@@ -5,601 +5,677 @@
  * OpenAPI spec version: v0
  */
 import {
-  MutationFunction,
-  QueryFunction,
-  QueryKey,
-  UseMutationOptions,
-  UseQueryOptions,
-  UseQueryResult,
-  useMutation,
   useQuery,
+  useMutation,
+  UseQueryOptions,
+  UseMutationOptions,
+  QueryFunction,
+  MutationFunction,
+  UseQueryResult,
+  QueryKey
 } from 'react-query'
-
-import { customInstance } from '../services/network'
 import type {
+  PhilipsHueLightInboundDto,
+  SignUpOutboundDto,
+  SignUpInboundDto,
+  RecipeOutboundDto,
+  CreateRecipeOutboundDto,
+  CreateRecipeInboundDto,
+  PortfolioContactOutboundDto,
+  PortfolioContactInboundDto,
+  EmailInboundDto,
+  ClearstreamUserOutboundDto,
+  CreateClearstreamUserOutboundDto,
+  CreateClearstreamUserInboundDto,
+  BookingOutboundDto,
   Booking,
   BookingInboundDto,
-  BookingOutboundDto,
-  ClearstreamUserOutboundDto,
-  CreateClearstreamUserInboundDto,
-  CreateClearstreamUserOutboundDto,
-  CreateRecipeInboundDto,
-  CreateRecipeOutboundDto,
-  EmailInboundDto,
-  PhilipsHueLightInboundDto,
-  PhilipsHueLightOutboundDto,
-  PortfolioContactInboundDto,
-  PortfolioContactOutboundDto,
-  RecipeOutboundDto,
+  ConnectedUserOutboundDto,
   RestaurantOutboundDto,
-  SignUpInboundDto,
-  SignUpOutboundDto,
+  PhilipsHueLightOutboundDto
 } from './model'
+import { customInstance } from '../services/network'
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AsyncReturnType<T extends (...args: any) => Promise<any>> = T extends (...args: any) => Promise<infer R>
-  ? R
-  : any
+type AsyncReturnType<
+T extends (...args: any) => Promise<any>
+> = T extends (...args: any) => Promise<infer R> ? R : any;
 
-export const updateLightById = (lightId: number, philipsHueLightInboundDto: PhilipsHueLightInboundDto) => {
-  return customInstance<void>({
-    url: `/api/lights/${lightId}`,
-    method: 'put',
-    data: philipsHueLightInboundDto,
-  })
-}
 
-export const useUpdateLightById = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof updateLightById>,
-    TError,
-    { lightId: number; data: PhilipsHueLightInboundDto },
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
+export const updateLightById = (
+    lightId: number,
+    philipsHueLightInboundDto: PhilipsHueLightInboundDto,
+ ) => {
+      return customInstance<void>(
+      {url: `/api/lights/${lightId}`, method: 'put',
+      data: philipsHueLightInboundDto
+    },
+      );
+    }
+  
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof updateLightById>,
-    { lightId: number; data: PhilipsHueLightInboundDto }
-  > = (props) => {
-    const { lightId, data } = props || {}
 
-    return updateLightById(lightId, data)
-  }
+    export const useUpdateLightById = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof updateLightById>, TError,{lightId: number;data: PhilipsHueLightInboundDto}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof updateLightById>,
-    TError,
-    { lightId: number; data: PhilipsHueLightInboundDto },
-    TContext
-  >(mutationFn, mutationOptions)
-}
+      
 
-export const signUp = (signUpInboundDto: SignUpInboundDto) => {
-  return customInstance<SignUpOutboundDto>({
-    url: `/api/users/sign-up`,
-    method: 'post',
-    data: signUpInboundDto,
-  })
-}
 
-export const useSignUp = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<AsyncReturnType<typeof signUp>, TError, { data: SignUpInboundDto }, TContext>
-}) => {
-  const { mutation: mutationOptions } = options || {}
+      const mutationFn: MutationFunction<AsyncReturnType<typeof updateLightById>, {lightId: number;data: PhilipsHueLightInboundDto}> = (props) => {
+          const {lightId,data} = props || {};
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof signUp>, { data: SignUpInboundDto }> = (
-    props
-  ) => {
-    const { data } = props || {}
+          return  updateLightById(lightId,data,)
+        }
 
-    return signUp(data)
-  }
+      return useMutation<AsyncReturnType<typeof updateLightById>, TError, {lightId: number;data: PhilipsHueLightInboundDto}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const signUp = (
+    signUpInboundDto: SignUpInboundDto,
+ ) => {
+      return customInstance<SignUpOutboundDto>(
+      {url: `/api/users/sign-up`, method: 'post',
+      data: signUpInboundDto
+    },
+      );
+    }
+  
 
-  return useMutation<AsyncReturnType<typeof signUp>, TError, { data: SignUpInboundDto }, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
 
-export const getRecipes = () => {
-  return customInstance<RecipeOutboundDto[]>({
-    url: `/api/recipes`,
-    method: 'get',
-  })
-}
+    export const useSignUp = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof signUp>, TError,{data: SignUpInboundDto}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-export const getGetRecipesQueryKey = () => [`/api/recipes`]
+      
 
-export const useGetRecipes = <TData = AsyncReturnType<typeof getRecipes>, TError = unknown>(options?: {
-  query?: UseQueryOptions<AsyncReturnType<typeof getRecipes>, TError, TData>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options || {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetRecipesQueryKey()
+      const mutationFn: MutationFunction<AsyncReturnType<typeof signUp>, {data: SignUpInboundDto}> = (props) => {
+          const {data} = props || {};
 
-  const queryFn: QueryFunction<AsyncReturnType<typeof getRecipes>> = () => getRecipes()
+          return  signUp(data,)
+        }
+
+      return useMutation<AsyncReturnType<typeof signUp>, TError, {data: SignUpInboundDto}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const getRecipes = (
+    
+ ) => {
+      return customInstance<RecipeOutboundDto[]>(
+      {url: `/api/recipes`, method: 'get'
+    },
+      );
+    }
+  
+
+export const getGetRecipesQueryKey = () => [`/api/recipes`];
+
+    
+export const useGetRecipes = <TData = AsyncReturnType<typeof getRecipes>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getRecipes>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetRecipesQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getRecipes>> = () => getRecipes();
 
   const query = useQuery<AsyncReturnType<typeof getRecipes>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
+    ...query
   }
 }
 
-export const createRecipe = (createRecipeInboundDto: CreateRecipeInboundDto) => {
-  return customInstance<CreateRecipeOutboundDto>({
-    url: `/api/recipes`,
-    method: 'post',
-    data: createRecipeInboundDto,
-  })
-}
 
-export const useCreateRecipe = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof createRecipe>,
-    TError,
-    { data: CreateRecipeInboundDto },
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
+export const createRecipe = (
+    createRecipeInboundDto: CreateRecipeInboundDto,
+ ) => {
+      return customInstance<CreateRecipeOutboundDto>(
+      {url: `/api/recipes`, method: 'post',
+      data: createRecipeInboundDto
+    },
+      );
+    }
+  
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof createRecipe>,
-    { data: CreateRecipeInboundDto }
-  > = (props) => {
-    const { data } = props || {}
 
-    return createRecipe(data)
-  }
+    export const useCreateRecipe = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createRecipe>, TError,{data: CreateRecipeInboundDto}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof createRecipe>,
-    TError,
-    { data: CreateRecipeInboundDto },
-    TContext
-  >(mutationFn, mutationOptions)
-}
+      
 
-export const getPortfolioContacts = () => {
-  return customInstance<PortfolioContactOutboundDto>({
-    url: `/api/portfolio-contacts`,
-    method: 'get',
-  })
-}
 
-export const getGetPortfolioContactsQueryKey = () => [`/api/portfolio-contacts`]
+      const mutationFn: MutationFunction<AsyncReturnType<typeof createRecipe>, {data: CreateRecipeInboundDto}> = (props) => {
+          const {data} = props || {};
 
-export const useGetPortfolioContacts = <
-  TData = AsyncReturnType<typeof getPortfolioContacts>,
-  TError = unknown
->(options?: {
-  query?: UseQueryOptions<AsyncReturnType<typeof getPortfolioContacts>, TError, TData>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options || {}
+          return  createRecipe(data,)
+        }
 
-  const queryKey = queryOptions?.queryKey ?? getGetPortfolioContactsQueryKey()
+      return useMutation<AsyncReturnType<typeof createRecipe>, TError, {data: CreateRecipeInboundDto}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const getPortfolioContacts = (
+    
+ ) => {
+      return customInstance<PortfolioContactOutboundDto>(
+      {url: `/api/portfolio-contacts`, method: 'get'
+    },
+      );
+    }
+  
 
-  const queryFn: QueryFunction<AsyncReturnType<typeof getPortfolioContacts>> = () => getPortfolioContacts()
+export const getGetPortfolioContactsQueryKey = () => [`/api/portfolio-contacts`];
 
-  const query = useQuery<AsyncReturnType<typeof getPortfolioContacts>, TError, TData>(
-    queryKey,
-    queryFn,
-    queryOptions
-  )
+    
+export const useGetPortfolioContacts = <TData = AsyncReturnType<typeof getPortfolioContacts>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getPortfolioContacts>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetPortfolioContactsQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getPortfolioContacts>> = () => getPortfolioContacts();
+
+  const query = useQuery<AsyncReturnType<typeof getPortfolioContacts>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
+    ...query
   }
 }
 
-export const createPortfolioContact = (portfolioContactInboundDto: PortfolioContactInboundDto) => {
-  return customInstance<PortfolioContactOutboundDto>({
-    url: `/api/portfolio-contacts`,
-    method: 'post',
-    data: portfolioContactInboundDto,
-  })
-}
 
-export const useCreatePortfolioContact = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof createPortfolioContact>,
-    TError,
-    { data: PortfolioContactInboundDto },
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
+export const createPortfolioContact = (
+    portfolioContactInboundDto: PortfolioContactInboundDto,
+ ) => {
+      return customInstance<PortfolioContactOutboundDto>(
+      {url: `/api/portfolio-contacts`, method: 'post',
+      data: portfolioContactInboundDto
+    },
+      );
+    }
+  
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof createPortfolioContact>,
-    { data: PortfolioContactInboundDto }
-  > = (props) => {
-    const { data } = props || {}
 
-    return createPortfolioContact(data)
-  }
+    export const useCreatePortfolioContact = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createPortfolioContact>, TError,{data: PortfolioContactInboundDto}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof createPortfolioContact>,
-    TError,
-    { data: PortfolioContactInboundDto },
-    TContext
-  >(mutationFn, mutationOptions)
-}
+      
 
-export const sendEmail = (emailInboundDto: EmailInboundDto) => {
-  return customInstance<string>({
-    url: `/api/emails`,
-    method: 'post',
-    data: emailInboundDto,
-  })
-}
 
-export const useSendEmail = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof sendEmail>,
-    TError,
-    { data: EmailInboundDto },
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
+      const mutationFn: MutationFunction<AsyncReturnType<typeof createPortfolioContact>, {data: PortfolioContactInboundDto}> = (props) => {
+          const {data} = props || {};
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof sendEmail>, { data: EmailInboundDto }> = (
-    props
-  ) => {
-    const { data } = props || {}
+          return  createPortfolioContact(data,)
+        }
 
-    return sendEmail(data)
-  }
+      return useMutation<AsyncReturnType<typeof createPortfolioContact>, TError, {data: PortfolioContactInboundDto}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const sendEmail = (
+    emailInboundDto: EmailInboundDto,
+ ) => {
+      return customInstance<string>(
+      {url: `/api/emails`, method: 'post',
+      data: emailInboundDto
+    },
+      );
+    }
+  
 
-  return useMutation<AsyncReturnType<typeof sendEmail>, TError, { data: EmailInboundDto }, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
 
-export const createEmailWithTemplate = () => {
-  return customInstance<string>({
-    url: `/api/emails/with-template`,
-    method: 'post',
-  })
-}
+    export const useSendEmail = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof sendEmail>, TError,{data: EmailInboundDto}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-export const useCreateEmailWithTemplate = <
-  TError = unknown,
-  TVariables = void,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<AsyncReturnType<typeof createEmailWithTemplate>, TError, TVariables, TContext>
-}) => {
-  const { mutation: mutationOptions } = options || {}
+      
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof createEmailWithTemplate>, TVariables> = () => {
-    return createEmailWithTemplate()
-  }
 
-  return useMutation<AsyncReturnType<typeof createEmailWithTemplate>, TError, TVariables, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
+      const mutationFn: MutationFunction<AsyncReturnType<typeof sendEmail>, {data: EmailInboundDto}> = (props) => {
+          const {data} = props || {};
 
-export const createTemplate = () => {
-  return customInstance<string>({
-    url: `/api/emails/templates`,
-    method: 'post',
-  })
-}
+          return  sendEmail(data,)
+        }
 
-export const useCreateTemplate = <TError = unknown, TVariables = void, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<AsyncReturnType<typeof createTemplate>, TError, TVariables, TContext>
-}) => {
-  const { mutation: mutationOptions } = options || {}
+      return useMutation<AsyncReturnType<typeof sendEmail>, TError, {data: EmailInboundDto}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const createEmailWithTemplate = (
+    
+ ) => {
+      return customInstance<string>(
+      {url: `/api/emails/with-template`, method: 'post'
+    },
+      );
+    }
+  
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof createTemplate>, TVariables> = () => {
-    return createTemplate()
-  }
 
-  return useMutation<AsyncReturnType<typeof createTemplate>, TError, TVariables, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
+    export const useCreateEmailWithTemplate = <TError = unknown,
+    TVariables = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createEmailWithTemplate>, TError,TVariables, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-export const deleteTemplate = () => {
-  return customInstance<string>({
-    url: `/api/emails/templates`,
-    method: 'delete',
-  })
-}
+      
 
-export const useDeleteTemplate = <TError = unknown, TVariables = void, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<AsyncReturnType<typeof deleteTemplate>, TError, TVariables, TContext>
-}) => {
-  const { mutation: mutationOptions } = options || {}
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof deleteTemplate>, TVariables> = () => {
-    return deleteTemplate()
-  }
+      const mutationFn: MutationFunction<AsyncReturnType<typeof createEmailWithTemplate>, TVariables> = () => {
+          ;
 
-  return useMutation<AsyncReturnType<typeof deleteTemplate>, TError, TVariables, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
+          return  createEmailWithTemplate()
+        }
 
-export const createEmailFromPortfolio = () => {
-  return customInstance<string>({
-    url: `/api/emails/portfolio/contact`,
-    method: 'post',
-  })
-}
+      return useMutation<AsyncReturnType<typeof createEmailWithTemplate>, TError, TVariables, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const createTemplate = (
+    
+ ) => {
+      return customInstance<string>(
+      {url: `/api/emails/templates`, method: 'post'
+    },
+      );
+    }
+  
 
-export const useCreateEmailFromPortfolio = <
-  TError = unknown,
-  TVariables = void,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof createEmailFromPortfolio>,
-    TError,
-    TVariables,
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof createEmailFromPortfolio>, TVariables> = () => {
-    return createEmailFromPortfolio()
-  }
+    export const useCreateTemplate = <TError = unknown,
+    TVariables = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createTemplate>, TError,TVariables, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-  return useMutation<AsyncReturnType<typeof createEmailFromPortfolio>, TError, TVariables, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
+      
 
-export const getClearstreamUsers = () => {
-  return customInstance<ClearstreamUserOutboundDto[]>({
-    url: `/api/clearstream-users`,
-    method: 'get',
-  })
-}
 
-export const getGetClearstreamUsersQueryKey = () => [`/api/clearstream-users`]
+      const mutationFn: MutationFunction<AsyncReturnType<typeof createTemplate>, TVariables> = () => {
+          ;
 
-export const useGetClearstreamUsers = <
-  TData = AsyncReturnType<typeof getClearstreamUsers>,
-  TError = unknown
->(options?: {
-  query?: UseQueryOptions<AsyncReturnType<typeof getClearstreamUsers>, TError, TData>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options || {}
+          return  createTemplate()
+        }
 
-  const queryKey = queryOptions?.queryKey ?? getGetClearstreamUsersQueryKey()
+      return useMutation<AsyncReturnType<typeof createTemplate>, TError, TVariables, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const deleteTemplate = (
+    
+ ) => {
+      return customInstance<string>(
+      {url: `/api/emails/templates`, method: 'delete'
+    },
+      );
+    }
+  
 
-  const queryFn: QueryFunction<AsyncReturnType<typeof getClearstreamUsers>> = () => getClearstreamUsers()
 
-  const query = useQuery<AsyncReturnType<typeof getClearstreamUsers>, TError, TData>(
-    queryKey,
-    queryFn,
-    queryOptions
-  )
+    export const useDeleteTemplate = <TError = unknown,
+    TVariables = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof deleteTemplate>, TError,TVariables, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
+
+      
+
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof deleteTemplate>, TVariables> = () => {
+          ;
+
+          return  deleteTemplate()
+        }
+
+      return useMutation<AsyncReturnType<typeof deleteTemplate>, TError, TVariables, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const createEmailFromPortfolio = (
+    
+ ) => {
+      return customInstance<string>(
+      {url: `/api/emails/portfolio/contact`, method: 'post'
+    },
+      );
+    }
+  
+
+
+    export const useCreateEmailFromPortfolio = <TError = unknown,
+    TVariables = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createEmailFromPortfolio>, TError,TVariables, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
+
+      
+
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof createEmailFromPortfolio>, TVariables> = () => {
+          ;
+
+          return  createEmailFromPortfolio()
+        }
+
+      return useMutation<AsyncReturnType<typeof createEmailFromPortfolio>, TError, TVariables, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const getClearstreamUsers = (
+    
+ ) => {
+      return customInstance<ClearstreamUserOutboundDto[]>(
+      {url: `/api/clearstream-users`, method: 'get'
+    },
+      );
+    }
+  
+
+export const getGetClearstreamUsersQueryKey = () => [`/api/clearstream-users`];
+
+    
+export const useGetClearstreamUsers = <TData = AsyncReturnType<typeof getClearstreamUsers>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getClearstreamUsers>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetClearstreamUsersQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getClearstreamUsers>> = () => getClearstreamUsers();
+
+  const query = useQuery<AsyncReturnType<typeof getClearstreamUsers>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
+    ...query
   }
 }
 
-export const createClearstreamUser = (createClearstreamUserInboundDto: CreateClearstreamUserInboundDto) => {
-  return customInstance<CreateClearstreamUserOutboundDto>({
-    url: `/api/clearstream-users`,
-    method: 'post',
-    data: createClearstreamUserInboundDto,
-  })
-}
 
-export const useCreateClearstreamUser = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof createClearstreamUser>,
-    TError,
-    { data: CreateClearstreamUserInboundDto },
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
+export const createClearstreamUser = (
+    createClearstreamUserInboundDto: CreateClearstreamUserInboundDto,
+ ) => {
+      return customInstance<CreateClearstreamUserOutboundDto>(
+      {url: `/api/clearstream-users`, method: 'post',
+      data: createClearstreamUserInboundDto
+    },
+      );
+    }
+  
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof createClearstreamUser>,
-    { data: CreateClearstreamUserInboundDto }
-  > = (props) => {
-    const { data } = props || {}
 
-    return createClearstreamUser(data)
-  }
+    export const useCreateClearstreamUser = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createClearstreamUser>, TError,{data: CreateClearstreamUserInboundDto}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof createClearstreamUser>,
-    TError,
-    { data: CreateClearstreamUserInboundDto },
-    TContext
-  >(mutationFn, mutationOptions)
-}
+      
 
-export const getBookings = () => {
-  return customInstance<BookingOutboundDto[]>({
-    url: `/api/bookings`,
-    method: 'get',
-  })
-}
 
-export const getGetBookingsQueryKey = () => [`/api/bookings`]
+      const mutationFn: MutationFunction<AsyncReturnType<typeof createClearstreamUser>, {data: CreateClearstreamUserInboundDto}> = (props) => {
+          const {data} = props || {};
 
-export const useGetBookings = <TData = AsyncReturnType<typeof getBookings>, TError = unknown>(options?: {
-  query?: UseQueryOptions<AsyncReturnType<typeof getBookings>, TError, TData>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options || {}
+          return  createClearstreamUser(data,)
+        }
 
-  const queryKey = queryOptions?.queryKey ?? getGetBookingsQueryKey()
+      return useMutation<AsyncReturnType<typeof createClearstreamUser>, TError, {data: CreateClearstreamUserInboundDto}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const getBookings = (
+    
+ ) => {
+      return customInstance<BookingOutboundDto[]>(
+      {url: `/api/bookings`, method: 'get'
+    },
+      );
+    }
+  
 
-  const queryFn: QueryFunction<AsyncReturnType<typeof getBookings>> = () => getBookings()
+export const getGetBookingsQueryKey = () => [`/api/bookings`];
+
+    
+export const useGetBookings = <TData = AsyncReturnType<typeof getBookings>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getBookings>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetBookingsQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getBookings>> = () => getBookings();
 
   const query = useQuery<AsyncReturnType<typeof getBookings>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
+    ...query
   }
 }
 
-export const createBooking = (bookingInboundDto: BookingInboundDto) => {
-  return customInstance<Booking>({
-    url: `/api/bookings`,
-    method: 'post',
-    data: bookingInboundDto,
-  })
-}
 
-export const useCreateBooking = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof createBooking>,
-    TError,
-    { data: BookingInboundDto },
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
+export const createBooking = (
+    bookingInboundDto: BookingInboundDto,
+ ) => {
+      return customInstance<Booking>(
+      {url: `/api/bookings`, method: 'post',
+      data: bookingInboundDto
+    },
+      );
+    }
+  
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof createBooking>, { data: BookingInboundDto }> = (
-    props
-  ) => {
-    const { data } = props || {}
 
-    return createBooking(data)
-  }
+    export const useCreateBooking = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createBooking>, TError,{data: BookingInboundDto}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-  return useMutation<AsyncReturnType<typeof createBooking>, TError, { data: BookingInboundDto }, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
+      
 
-export const confirmBooking = (bookingId: string) => {
-  return customInstance<Booking>({
-    url: `/api/bookings/${bookingId}/confirm`,
-    method: 'post',
-  })
-}
 
-export const useConfirmBooking = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof confirmBooking>,
-    TError,
-    { bookingId: string },
-    TContext
-  >
-}) => {
-  const { mutation: mutationOptions } = options || {}
+      const mutationFn: MutationFunction<AsyncReturnType<typeof createBooking>, {data: BookingInboundDto}> = (props) => {
+          const {data} = props || {};
 
-  const mutationFn: MutationFunction<AsyncReturnType<typeof confirmBooking>, { bookingId: string }> = (
-    props
-  ) => {
-    const { bookingId } = props || {}
+          return  createBooking(data,)
+        }
 
-    return confirmBooking(bookingId)
-  }
+      return useMutation<AsyncReturnType<typeof createBooking>, TError, {data: BookingInboundDto}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const confirmBooking = (
+    bookingId: string,
+ ) => {
+      return customInstance<Booking>(
+      {url: `/api/bookings/${bookingId}/confirm`, method: 'post'
+    },
+      );
+    }
+  
 
-  return useMutation<AsyncReturnType<typeof confirmBooking>, TError, { bookingId: string }, TContext>(
-    mutationFn,
-    mutationOptions
-  )
-}
 
-export const getRestaurants = () => {
-  return customInstance<RestaurantOutboundDto[]>({
-    url: `/api/restaurants`,
-    method: 'get',
-  })
-}
+    export const useConfirmBooking = <TError = unknown,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof confirmBooking>, TError,{bookingId: string}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options || {}
 
-export const getGetRestaurantsQueryKey = () => [`/api/restaurants`]
+      
 
-export const useGetRestaurants = <
-  TData = AsyncReturnType<typeof getRestaurants>,
-  TError = unknown
->(options?: {
-  query?: UseQueryOptions<AsyncReturnType<typeof getRestaurants>, TError, TData>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options || {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetRestaurantsQueryKey()
+      const mutationFn: MutationFunction<AsyncReturnType<typeof confirmBooking>, {bookingId: string}> = (props) => {
+          const {bookingId} = props || {};
 
-  const queryFn: QueryFunction<AsyncReturnType<typeof getRestaurants>> = () => getRestaurants()
+          return  confirmBooking(bookingId,)
+        }
 
-  const query = useQuery<AsyncReturnType<typeof getRestaurants>, TError, TData>(
-    queryKey,
-    queryFn,
-    queryOptions
-  )
+      return useMutation<AsyncReturnType<typeof confirmBooking>, TError, {bookingId: string}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const getConnectedUser = (
+    
+ ) => {
+      return customInstance<ConnectedUserOutboundDto>(
+      {url: `/api/users/me`, method: 'get'
+    },
+      );
+    }
+  
+
+export const getGetConnectedUserQueryKey = () => [`/api/users/me`];
+
+    
+export const useGetConnectedUser = <TData = AsyncReturnType<typeof getConnectedUser>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getConnectedUser>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetConnectedUserQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getConnectedUser>> = () => getConnectedUser();
+
+  const query = useQuery<AsyncReturnType<typeof getConnectedUser>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
+    ...query
   }
 }
 
-export const getLights = () => {
-  return customInstance<PhilipsHueLightOutboundDto[]>({
-    url: `/api/lights`,
-    method: 'get',
-  })
+
+export const getRestaurants = (
+    
+ ) => {
+      return customInstance<RestaurantOutboundDto[]>(
+      {url: `/api/restaurants`, method: 'get'
+    },
+      );
+    }
+  
+
+export const getGetRestaurantsQueryKey = () => [`/api/restaurants`];
+
+    
+export const useGetRestaurants = <TData = AsyncReturnType<typeof getRestaurants>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getRestaurants>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetRestaurantsQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getRestaurants>> = () => getRestaurants();
+
+  const query = useQuery<AsyncReturnType<typeof getRestaurants>, TError, TData>(queryKey, queryFn, queryOptions)
+
+  return {
+    queryKey,
+    ...query
+  }
 }
 
-export const getGetLightsQueryKey = () => [`/api/lights`]
 
-export const useGetLights = <TData = AsyncReturnType<typeof getLights>, TError = unknown>(options?: {
-  query?: UseQueryOptions<AsyncReturnType<typeof getLights>, TError, TData>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options || {}
+export const getLights = (
+    
+ ) => {
+      return customInstance<PhilipsHueLightOutboundDto[]>(
+      {url: `/api/lights`, method: 'get'
+    },
+      );
+    }
+  
 
-  const queryKey = queryOptions?.queryKey ?? getGetLightsQueryKey()
+export const getGetLightsQueryKey = () => [`/api/lights`];
 
-  const queryFn: QueryFunction<AsyncReturnType<typeof getLights>> = () => getLights()
+    
+export const useGetLights = <TData = AsyncReturnType<typeof getLights>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getLights>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetLightsQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getLights>> = () => getLights();
 
   const query = useQuery<AsyncReturnType<typeof getLights>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
+    ...query
   }
 }
 
-export const getHealth = () => {
-  return customInstance<string>({ url: `/api/health`, method: 'get' })
-}
 
-export const getGetHealthQueryKey = () => [`/api/health`]
+export const getHealth = (
+    
+ ) => {
+      return customInstance<string>(
+      {url: `/api/health`, method: 'get'
+    },
+      );
+    }
+  
 
-export const useGetHealth = <TData = AsyncReturnType<typeof getHealth>, TError = unknown>(options?: {
-  query?: UseQueryOptions<AsyncReturnType<typeof getHealth>, TError, TData>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions } = options || {}
+export const getGetHealthQueryKey = () => [`/api/health`];
 
-  const queryKey = queryOptions?.queryKey ?? getGetHealthQueryKey()
+    
+export const useGetHealth = <TData = AsyncReturnType<typeof getHealth>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getHealth>, TError, TData>, }
 
-  const queryFn: QueryFunction<AsyncReturnType<typeof getHealth>> = () => getHealth()
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetHealthQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getHealth>> = () => getHealth();
 
   const query = useQuery<AsyncReturnType<typeof getHealth>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
+    ...query
   }
 }
+
+

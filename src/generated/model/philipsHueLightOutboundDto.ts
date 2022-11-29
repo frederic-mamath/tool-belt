@@ -6,9 +6,9 @@
  */
 
 export interface PhilipsHueLightOutboundDto {
-  id: number
-  name: string
-  brightness: number
-  contrast: number
-  isOn: boolean
+  id: number;
+  name: string;
+  brightness: number;
+  contrast: number;
+  isOn: boolean;
 }

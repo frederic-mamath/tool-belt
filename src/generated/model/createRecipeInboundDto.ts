@@ -6,12 +6,12 @@
  */
 
 export interface CreateRecipeInboundDto {
-  name?: string
-  pictureUrl?: string
-  servingCount?: number
-  preparationDurationInMillis?: number
-  restDurationInMillis?: number
-  cookingDurationInMillis?: number
-  instructions?: string[]
-  ingredients?: string[]
+  name?: string;
+  pictureUrl?: string;
+  servingCount?: number;
+  preparationDurationInMillis?: number;
+  restDurationInMillis?: number;
+  cookingDurationInMillis?: number;
+  instructions?: string[];
+  ingredients?: string[];
 }
