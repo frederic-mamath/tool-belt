@@ -5,5 +5,6 @@ export const shuffle = <T>(anyArray: T[]): T[] => {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
   }
+
   return shuffledArray;
 };

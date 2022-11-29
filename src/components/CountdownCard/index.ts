@@ -1,1 +1,1 @@
-export { default } from "./CountdownCard";
+export { default } from './CountdownCard'

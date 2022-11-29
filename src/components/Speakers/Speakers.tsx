@@ -1,6 +1,7 @@
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import RefreshIcon from "@mui/icons-material/Refresh";
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import {
+  Button,
   Card,
   Checkbox,
   IconButton,
@@ -9,53 +10,74 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   Menu,
   MenuItem,
   Stack,
   Tooltip,
-} from "@mui/material";
-import { WORKERS, Worker } from "mocks/workers";
-import { append, without } from "ramda";
-import { MouseEventHandler, useState } from "react";
-import { shuffle } from "services/array";
+} from '@mui/material'
+import { append, groupBy, without } from 'ramda'
+import { MouseEventHandler, useEffect, useState } from 'react'
 
-import { getCheckedWorkers } from "./Speakers.service";
+import { useGetClearstreamUsers } from 'generated/hook'
+import { ClearstreamUserOutboundDto } from 'generated/model'
+import { shuffle } from 'services/array'
 
-const Speakers = () => {
-  const [speakersOrdered, setSpeakersOrdered] = useState<Worker[]>(
-    shuffle(WORKERS)
-  );
+import { getCheckedWorkers, getFilteredSpeakers } from './Speakers.service'
+
+interface Props {
+  onStart: (workers: ClearstreamUserOutboundDto[]) => void
+}
+
+const mapByClearstreamUserCategory = groupBy((clearstreamUserOutboundDto: ClearstreamUserOutboundDto) => {
+  return clearstreamUserOutboundDto.clearstreamUserCategory || "other";
+});
+
+
+const Speakers = (props: Props) => {
+  const { onStart } = props
+  const getClearstreamUsers = useGetClearstreamUsers()
+  const clearstreamUsers = getClearstreamUsers.data || []
+  const [clearstreamUsersById, setClearstreamUsersById] = useState<{ [categoryId: string]: ClearstreamUserOutboundDto[] }>({});
+  const [speakersOrdered, setSpeakersOrdered] = useState<ClearstreamUserOutboundDto[]>(shuffle(clearstreamUsers))
   const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>(
-    getCheckedWorkers(WORKERS).map((worker) => worker.id)
-  );
+    getCheckedWorkers(speakersOrdered).map((clearstreamUserOutboundDto) => clearstreamUserOutboundDto.id)
+  )
 
-  const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    if (clearstreamUsers.length > 0) {
+      setClearstreamUsersById(mapByClearstreamUserCategory(clearstreamUsers))
+      setSpeakersOrdered(clearstreamUsers)
+    }
+  }, [clearstreamUsers])
+  const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null)
 
   const onClickMore: MouseEventHandler<HTMLButtonElement> = (event) => {
-    setMenuAnchor(event.currentTarget);
-  };
+    setMenuAnchor(event.currentTarget)
+  }
 
   const onCloseMenu = () => {
-    setMenuAnchor(null);
-  };
+    setMenuAnchor(null)
+  }
 
-  const onClickToggleSpeaker = (worker: Worker) => {
-    const currentIndex = filteredSpeakerIds.indexOf(worker.id);
+  const onClickToggleSpeaker = (clearstreamUserOutboundDto: ClearstreamUserOutboundDto) => {
+    const currentIndex = filteredSpeakerIds.indexOf(clearstreamUserOutboundDto.id)
 
     if (currentIndex === -1) {
-      setFilteredSpeakerIds(append(worker.id, filteredSpeakerIds));
-      return;
+      setFilteredSpeakerIds(append(clearstreamUserOutboundDto.id, filteredSpeakerIds))
+
+      return
     }
 
-    setFilteredSpeakerIds(without([worker.id], filteredSpeakerIds));
-  };
+    setFilteredSpeakerIds(without([clearstreamUserOutboundDto.id], filteredSpeakerIds))
+  }
 
   const onShuffleSpeakers = () => {
-    setSpeakersOrdered(shuffle(WORKERS));
-  };
+    setSpeakersOrdered(shuffle(clearstreamUsers))
+  }
 
   return (
-    <Card sx={{ maxWidth: 248, p: 2 }} elevation={3}>
+    <Card sx={{ p: 2 }} elevation={3}>
       <Stack direction="row">
         <Tooltip title="Shuffle speakers">
           <IconButton onClick={onShuffleSpeakers}>
@@ -72,7 +94,7 @@ const Speakers = () => {
         <MenuItem onClick={onShuffleSpeakers}>Shuffle</MenuItem>
         <MenuItem
           onClick={() => {
-            setFilteredSpeakerIds([]);
+            setFilteredSpeakerIds([])
           }}
         >
           Check all
@@ -80,30 +102,45 @@ const Speakers = () => {
         <MenuItem disabled>Uncheck all</MenuItem>
         <MenuItem disabled>Check by role</MenuItem>
       </Menu>
-      <List>
-        {speakersOrdered.map((worker) => (
-          <ListItem key={worker.id} sx={{ height: 40 }}>
-            <ListItemButton
-              disabled={worker.isOff}
-              onClick={() => onClickToggleSpeaker(worker)}
-              dense
-            >
+      <Stack direction={{ sm: "column", md: "row" }}>
+      {Object.keys(clearstreamUsersById).map(clearstreamUserCategory => (
+            <List
+            key={`daily-clearstream-user-category-${clearstreamUserCategory}`}
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                {clearstreamUserCategory}
+              </ListSubheader>
+            }
+          >
+          {clearstreamUsersById[clearstreamUserCategory].map(clearstreamUser => (
+            <ListItem key={clearstreamUser.id} sx={{ height: 40 }}>
+            <ListItemButton disabled={clearstreamUser.isOff} onClick={() => onClickToggleSpeaker(clearstreamUser)} dense>
               <ListItemIcon>
                 <Checkbox
                   edge="start"
-                  checked={!filteredSpeakerIds.includes(worker.id)}
+                  checked={!filteredSpeakerIds.includes(clearstreamUser.id)}
                   tabIndex={-1}
                   disableRipple
-                  inputProps={{ "aria-labelledby": worker.id }}
+                  inputProps={{ 'aria-labelledby': clearstreamUser.id }}
                 />
               </ListItemIcon>
-              <ListItemText id={worker.id} primary={worker.displayName} />
+              <ListItemText id={clearstreamUser.id} primary={clearstreamUser.firstName || "unknown"} />
             </ListItemButton>
           </ListItem>
-        ))}
-      </List>
-    </Card>
-  );
-};
+          ))}
 
-export default Speakers;
+            </List>
+          ))}
+      </Stack>
+      <Button
+        onClick={() => onStart(shuffle(getFilteredSpeakers(speakersOrdered, filteredSpeakerIds)))}
+        variant="contained"
+        sx={{ width: '100%' }}
+      >
+        Let&apos;s talk !
+      </Button>
+    </Card>
+  )
+}
+
+export default Speakers
