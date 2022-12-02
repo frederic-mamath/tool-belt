@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import CountdownCard from "components/CountdownCard";
 import Speakers from "components/Speakers";
+import Truck from "components/Truck";
 import { ClearstreamUserOutboundDto } from "generated/model";
 
 const getCurrentSpeaker = ( filteredSpeakers: ClearstreamUserOutboundDto[], currentSpeakerIndex?: number,) => {
@@ -117,6 +118,7 @@ return <Stack
       </>
     )}
   </Stack>
+  <Truck />
 </Stack>;
 }
 
