@@ -19,3 +19,6 @@ export * from './createRecipeInboundDto'
 export * from './restaurantOutboundDto'
 export * from './recipeOutboundDto'
 export * from './connectedUserOutboundDto';
+export * from './clearstreamTicketInboundDto';
+export * from './createClearstreamTicketsInboundDto';
+export * from './clearstreamTicketOutboundDto';
