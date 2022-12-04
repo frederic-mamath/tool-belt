@@ -6,12 +6,11 @@ export const getCheckedWorkers = (workers: ClearstreamUserOutboundDto[]) => {
       return true;
     }
 
-    // @debt fred "this should be saved in DB"
-    // if (!worker.isEnabledByDefault) {
-    //   return true;
-    // }
+    if (worker.isRegularSpeakersForDailies) {
+      return false;
+    }
 
-    return false;
+    return true;
   });
 };
 
