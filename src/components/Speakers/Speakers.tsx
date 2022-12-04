@@ -40,14 +40,17 @@ const Speakers = (props: Props) => {
   const clearstreamUsers = getClearstreamUsers.data || []
   const [clearstreamUsersById, setClearstreamUsersById] = useState<{ [categoryId: string]: ClearstreamUserOutboundDto[] }>({});
   const [speakersOrdered, setSpeakersOrdered] = useState<ClearstreamUserOutboundDto[]>(shuffle(clearstreamUsers))
-  const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>(
-    getCheckedWorkers(speakersOrdered).map((clearstreamUserOutboundDto) => clearstreamUserOutboundDto.id)
-  )
+  const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>([])
+
+  console.log({ filteredSpeakerIds})
 
   useEffect(() => {
     if (clearstreamUsers.length > 0) {
       setClearstreamUsersById(mapByClearstreamUserCategory(clearstreamUsers))
       setSpeakersOrdered(clearstreamUsers)
+      setFilteredSpeakerIds(
+        getCheckedWorkers(clearstreamUsers).map((clearstreamUserOutboundDto) => clearstreamUserOutboundDto.id)
+      )
     }
   }, [clearstreamUsers])
   const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null)
