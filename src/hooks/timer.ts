@@ -1,1 +1,1 @@
-export const useTimer = () => {}
+export const useTimer = () => {};

@@ -43,7 +43,7 @@ export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
     (response) => {
       const { data } = response;
 
-      return data
+      return data;
     }
   );
 

@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { UserInBookingInboundDto } from './userInBookingInboundDto';
+import type { UserInBookingInboundDto } from "./userInBookingInboundDto";
 
 export interface BookingInboundDto {
   userInBookingInboundDto?: UserInBookingInboundDto;

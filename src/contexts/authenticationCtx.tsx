@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { getConnectedUser } from "generated/hook";
 import { ConnectedUserOutboundDto } from "generated/model";
@@ -8,7 +14,9 @@ interface AuthenticationContext {
   isAuthenticated: boolean;
   connectedUser?: ConnectedUserOutboundDto;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  setConnectedUser: React.Dispatch<React.SetStateAction<ConnectedUserOutboundDto | undefined>>;
+  setConnectedUser: React.Dispatch<
+    React.SetStateAction<ConnectedUserOutboundDto | undefined>
+  >;
 }
 
 export const AuthenticationCtx = createContext<AuthenticationContext>({
@@ -20,29 +28,32 @@ export const AuthenticationCtx = createContext<AuthenticationContext>({
 export const useAuthenticationCtx = () => useContext(AuthenticationCtx);
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export const AuthenticationCtxProvider = (props: Props) => {
-  const { children } = props
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [connectedUser, setConnectedUser] = useState<ConnectedUserOutboundDto>()
+  const { children } = props;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [connectedUser, setConnectedUser] =
+    useState<ConnectedUserOutboundDto>();
 
   useEffect(() => {
-    getConnectedUser()
-      .then(connectedUserOutboundDto => {
-        setIsAuthenticated(true);
-        setConnectedUser(connectedUserOutboundDto);
-      }
-   )
-  }, [])
-  
-  return <AuthenticationCtx.Provider value={{
-    isAuthenticated,
-    connectedUser,
-    setIsAuthenticated,
-    setConnectedUser,
-  }}>
-    {children}
-  </AuthenticationCtx.Provider>;
+    getConnectedUser().then((connectedUserOutboundDto) => {
+      setIsAuthenticated(true);
+      setConnectedUser(connectedUserOutboundDto);
+    });
+  }, []);
+
+  return (
+    <AuthenticationCtx.Provider
+      value={{
+        isAuthenticated,
+        connectedUser,
+        setIsAuthenticated,
+        setConnectedUser,
+      }}
+    >
+      {children}
+    </AuthenticationCtx.Provider>
+  );
 };
