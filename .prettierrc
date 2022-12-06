@@ -1,0 +1,8 @@
+{
+  "importOrder": [
+    "^(generated|services|components|pages|modules|hooks|config|mocks)/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

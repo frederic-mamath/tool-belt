@@ -4,7 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { ClearstreamTicketInboundDto } from './clearstreamTicketInboundDto';
+import type { ClearstreamTicketInboundDto } from "./clearstreamTicketInboundDto";
 
 export interface CreateClearstreamTicketsInboundDto {
   clearstreamTicketInboundDtoList: ClearstreamTicketInboundDto[];

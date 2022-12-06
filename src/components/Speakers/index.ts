@@ -1,1 +1,1 @@
-export { default } from './Speakers'
+export { default } from "./Speakers";
