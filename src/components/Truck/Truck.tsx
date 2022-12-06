@@ -11,7 +11,11 @@ const mapByOwnerFirstName = groupBy(
 );
 
 const Truck = () => {
-  const getClearstreamTickets = useGetClearstreamTickets();
+  const getClearstreamTickets = useGetClearstreamTickets({
+    query: {
+      refetchInterval: 5000,
+    },
+  });
 
   const clearstreamTicketOutboundDto = getClearstreamTickets.data || [];
   const clearstreamTicketByOwnerFirstName = mapByOwnerFirstName(
