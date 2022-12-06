@@ -168,6 +168,7 @@ const DailyPage = () => {
               >
                 {currentSpeakerIndex === undefined ? "Start" : "Next"}
               </Button>
+              <img src="http://cfcd-2205-jorge.ifs.dev.ams.azu.dbgcloud.io:8000/graph.jpg" />
             </Stack>
           </Stack>
         )}
