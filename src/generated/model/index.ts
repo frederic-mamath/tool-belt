@@ -22,3 +22,4 @@ export * from "./connectedUserOutboundDto";
 export * from "./clearstreamTicketInboundDto";
 export * from "./createClearstreamTicketsInboundDto";
 export * from "./clearstreamTicketOutboundDto";
+export * from './clearstreamTicketOutboundDtoStatus';

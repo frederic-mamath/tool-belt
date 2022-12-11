@@ -4,6 +4,7 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
+import type { ClearstreamTicketOutboundDtoStatus } from './clearstreamTicketOutboundDtoStatus';
 
 export interface ClearstreamTicketOutboundDto {
   clearstreamTicketId: string;
@@ -11,4 +12,8 @@ export interface ClearstreamTicketOutboundDto {
   ownerFirstName?: string;
   ticketTitle?: string;
   ticketPoint?: number;
+  status: ClearstreamTicketOutboundDtoStatus;
+  hasValidationReturn: boolean;
+  isUnexpectedDuringSprint: boolean;
+  isProblemSolvingMaterial: boolean;
 }
