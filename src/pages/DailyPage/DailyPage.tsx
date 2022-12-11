@@ -8,6 +8,14 @@ import {
   dailyMachine,
 } from "machines/dailyMachine";
 import { useEffect, useState } from "react";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  Tooltip as RechartsTooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import Speakers from "components/Speakers";
 import Truck from "components/Truck";
@@ -16,28 +24,13 @@ import { ClearstreamUserOutboundDto } from "generated/model";
 import {
   Stopwatch,
   Timer,
+  burndownChartData,
+  getCurrentSpeaker,
+  getNextSpeaker,
   getStopwatchDiff,
   getTimerDiff,
   shouldMeetingEnd,
 } from "./DailyPage.service";
-
-const getCurrentSpeaker = (
-  filteredSpeakers: ClearstreamUserOutboundDto[],
-  currentSpeakerIndex?: number
-) => {
-  return currentSpeakerIndex !== undefined
-    ? filteredSpeakers[currentSpeakerIndex]?.firstName || "Done !"
-    : "No one yet";
-};
-
-const getNextSpeaker = (
-  filteredSpeakers: ClearstreamUserOutboundDto[],
-  currentSpeakerIndex?: number
-) => {
-  return currentSpeakerIndex !== undefined
-    ? filteredSpeakers[currentSpeakerIndex + 1]?.firstName || "Let's Go !"
-    : "No one yet";
-};
 
 const DailyPage = () => {
   const [state, send] = useMachine(dailyMachine);
@@ -62,9 +55,7 @@ const DailyPage = () => {
   };
 
   const stopwatch = getStopwatchDiff(speakerStopwatch);
-
   const meetingTimerDisplay = getTimerDiff(meetingTimer);
-
   const shouldMeetingEndStyle = shouldMeetingEnd(meetingTimer)
     ? {
         backgroundColor: "red",
@@ -94,14 +85,8 @@ const DailyPage = () => {
   return (
     <Stack
       sx={{
-        p: {
-          xs: 4,
-          sm: 4,
-        },
-        gap: {
-          xs: 4,
-          sm: 4,
-        },
+        p: 4,
+        gap: 4,
       }}
     >
       <Stack direction="row" gap={2}>
@@ -170,7 +155,34 @@ const DailyPage = () => {
               <Tooltip title="This creates a snapshot to be able to identify problems tomorrow">
                 <Button variant="contained">Create snapshot</Button>
               </Tooltip>
+              <Tooltip title="Copy the summary of the daily into an email and sends it to the whole team">
+                <Button variant="contained">Send email</Button>
+              </Tooltip>
               <img src="http://cfcd-2205-jorge.ifs.dev.ams.azu.dbgcloud.io:8000/graph.jpg" />
+              <LineChart width={320} height={200} data={burndownChartData}>
+                <Line
+                  type="monotone"
+                  strokeWidth={2}
+                  dataKey="pointsLeftToDo"
+                  stroke="#8884d8"
+                />
+                <Line
+                  type="monotone"
+                  strokeWidth={2}
+                  dataKey="pointsLeftToDoIfEverythingIsValidated"
+                  stroke="#FFA000"
+                />
+                <Line
+                  type="monotone"
+                  strokeWidth={2}
+                  dataKey="expectedPointsDone"
+                  stroke="#FF0000"
+                />
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="name" />
+                <YAxis dataKey="expectedPointsDone" />
+                <RechartsTooltip />
+              </LineChart>
             </Stack>
           </Stack>
         )}
