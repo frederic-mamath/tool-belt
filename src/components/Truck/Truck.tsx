@@ -1,6 +1,7 @@
 import { Divider, Stack, Typography } from "@mui/material";
 import { groupBy } from "ramda";
 
+import TicketInTruck from "components/TicketInTruck/TicketInTruck";
 import { useGetClearstreamTickets } from "generated/hook";
 import { ClearstreamTicketOutboundDto } from "generated/model";
 
@@ -39,9 +40,10 @@ const Truck = () => {
               {clearstreamTicketByOwnerFirstName[user].map(
                 (clearstreamTicket) => {
                   return (
-                    <div key={clearstreamTicket.ticketId}>
-                      {clearstreamTicket.ticketTitle}
-                    </div>
+                    <TicketInTruck
+                      key={clearstreamTicket.clearstreamTicketId}
+                      clearstreamTicket={clearstreamTicket}
+                    />
                   );
                 }
               )}
