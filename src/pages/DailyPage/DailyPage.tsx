@@ -1,4 +1,4 @@
-import { Button, Card, Stack, Typography } from "@mui/material";
+import { Button, Card, Stack, Tooltip, Typography } from "@mui/material";
 import { useMachine } from "@xstate/react";
 import { DateTime } from "luxon";
 import {
@@ -103,16 +103,15 @@ const DailyPage = () => {
           sm: 4,
         },
       }}
-      justifyContent="center"
     >
-      <Stack direction="row" gap={4}>
+      <Stack direction="row" gap={2}>
         {state.matches(PICK_PARTICIPANTS_STATE) && (
           <Speakers onStart={onStartDaily} />
         )}
         {state.matches(ON_GOING_STATE) && (
           <Stack direction="row" flex={1} gap={2}>
             <Truck />
-            <Stack gap={4} maxWidth={320}>
+            <Stack gap={2} maxWidth={320}>
               <Card sx={{ flex: 1, p: 2 }} elevation={3}>
                 <Stack sx={{ height: "100%" }}>
                   <Typography variant="h6">Speaker</Typography>
@@ -126,10 +125,10 @@ const DailyPage = () => {
                   </Stack>
                 </Stack>
               </Card>
-              <Card sx={{ flex: 1, p: 2, opacity: 0.4 }} elevation={3}>
+              <Card sx={{ p: 2, opacity: 0.4 }} elevation={3}>
                 <Stack>
                   <Typography variant="h6">Next Speaker</Typography>
-                  <Typography variant="h3">
+                  <Typography variant="h5">
                     {nextSpeaker || "No one yet"}
                   </Typography>
                 </Stack>
@@ -168,6 +167,9 @@ const DailyPage = () => {
               >
                 {currentSpeakerIndex === undefined ? "Start" : "Next"}
               </Button>
+              <Tooltip title="This creates a snapshot to be able to identify problems tomorrow">
+                <Button variant="contained">Create snapshot</Button>
+              </Tooltip>
               <img src="http://cfcd-2205-jorge.ifs.dev.ams.azu.dbgcloud.io:8000/graph.jpg" />
             </Stack>
           </Stack>

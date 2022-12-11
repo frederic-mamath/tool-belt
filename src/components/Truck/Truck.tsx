@@ -3,13 +3,26 @@ import { groupBy } from "ramda";
 
 import TicketInTruck from "components/TicketInTruck/TicketInTruck";
 import { useGetClearstreamTickets } from "generated/hook";
-import { ClearstreamTicketOutboundDto } from "generated/model";
+import {
+  ClearstreamTicketOutboundDto,
+  ClearstreamTicketOutboundDtoStatus,
+} from "generated/model";
 
 const mapByOwnerFirstName = groupBy(
   (clearstreamTicketOutboundDto: ClearstreamTicketOutboundDto) => {
-    return clearstreamTicketOutboundDto.ownerFirstName || "unassigned";
+    return clearstreamTicketOutboundDto.ownerFirstName || "Unassigned";
   }
 );
+
+const byTicketStatus = (
+  ticketA: ClearstreamTicketOutboundDto,
+  ticketB: ClearstreamTicketOutboundDto
+) => {
+  if (ticketA.status === "TO_VALIDATE" && ticketB.status !== "TO_VALIDATE")
+    return -1;
+
+  return 1;
+};
 
 const Truck = () => {
   const getClearstreamTickets = useGetClearstreamTickets({
@@ -28,25 +41,55 @@ const Truck = () => {
       {Object.keys(clearstreamTicketByOwnerFirstName)
         .sort()
         .map((user: string) => {
+          const clearstreamTickets = clearstreamTicketByOwnerFirstName[user];
+          const dailyPointsCount = clearstreamTickets.reduce(
+            (acc, clearstreamTicket) => {
+              if (!clearstreamTicket.ticketPoint) return acc;
+
+              return acc + clearstreamTicket.ticketPoint;
+            },
+            0
+          );
+          const dailyPointsToValidateCount = clearstreamTickets.reduce(
+            (acc, clearstreamTicket) => {
+              if (
+                !clearstreamTicket.ticketPoint ||
+                clearstreamTicket.status !==
+                  ClearstreamTicketOutboundDtoStatus.TO_VALIDATE
+              )
+                return acc;
+
+              return acc + clearstreamTicket.ticketPoint;
+            },
+            0
+          );
+
           return (
             <Stack
               direction="column"
               key={`truck-column-${user}`}
               gap={2}
               flex={1}
+              maxWidth={user === "Unassigned" ? 160 : "unset"}
             >
-              <Typography variant="h6">{user}</Typography>
+              <Stack>
+                <Typography variant="h6">{user}</Typography>
+                <Typography variant="body1">
+                  ({dailyPointsCount} pts with {dailyPointsToValidateCount} to
+                  validate)
+                </Typography>
+              </Stack>
               <Divider />
-              {clearstreamTicketByOwnerFirstName[user].map(
-                (clearstreamTicket) => {
+              {clearstreamTickets
+                .sort(byTicketStatus)
+                .map((clearstreamTicket) => {
                   return (
                     <TicketInTruck
                       key={clearstreamTicket.clearstreamTicketId}
                       clearstreamTicket={clearstreamTicket}
                     />
                   );
-                }
-              )}
+                })}
             </Stack>
           );
         })}

@@ -21,10 +21,14 @@ const TicketInTruck = (props: Props) => {
     <Card
       sx={{
         p: 2,
+        "&:hover": {
+          cursor: "pointer",
+          backgroundColor: "lightblue",
+        },
         ...getIsToValidateStyle(isToValidate),
       }}
     >
-      {clearstreamTicket.ticketTitle}
+      {clearstreamTicket.ticketPoint} - {clearstreamTicket.ticketTitle}
     </Card>
   );
 };
