@@ -156,12 +156,15 @@ const DailyPage = () => {
                 <Typography variant="h3">{meetingTimerDisplay}</Typography>
               </Card>
               <Tooltip title="This creates a snapshot to be able to identify problems tomorrow">
-                <Button variant="contained">Create snapshot</Button>
+                <Button variant="contained" disabled>
+                  Create snapshot
+                </Button>
               </Tooltip>
               <Tooltip title="Copy the summary of the daily into an email and sends it to the whole team">
-                <Button variant="contained">Send email</Button>
+                <Button variant="contained" disabled>
+                  Send email
+                </Button>
               </Tooltip>
-              <img src="http://cfcd-2205-jorge.ifs.dev.ams.azu.dbgcloud.io:8000/graph.jpg" />
               <LineChart width={320} height={200} data={burndownChartData}>
                 <Line
                   type="monotone"
