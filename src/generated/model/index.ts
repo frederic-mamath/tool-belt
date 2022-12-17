@@ -23,3 +23,6 @@ export * from "./clearstreamTicketInboundDto";
 export * from "./createClearstreamTicketsInboundDto";
 export * from "./clearstreamTicketOutboundDto";
 export * from './clearstreamTicketOutboundDtoStatus';
+export * from './clearstreamTicketInboundDtoTicketStatus';
+export * from './ticketsOutboundDtoStatus';
+export * from './ticketsOutboundDto';

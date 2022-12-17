@@ -8,3 +8,16 @@ export const getIsToValidateStyle = (isToValidate: boolean) => {
 
   return {};
 };
+
+export const getIsProblemSolvingMaterial = (
+  isProblemSolvingMaterial: boolean
+) => {
+  if (isProblemSolvingMaterial) {
+    return {
+      backgroundColor: "red",
+      color: "white",
+    };
+  }
+
+  return {};
+};

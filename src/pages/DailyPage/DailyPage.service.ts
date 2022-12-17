@@ -59,7 +59,7 @@ export const getNextSpeaker = (
 ) => {
   return currentSpeakerIndex !== undefined
     ? filteredSpeakers[currentSpeakerIndex + 1]?.firstName || "Let's Go !"
-    : "No one yet";
+    : "Click here to start";
 };
 
 export const burndownChartData = [

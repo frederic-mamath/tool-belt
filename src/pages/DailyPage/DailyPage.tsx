@@ -1,4 +1,11 @@
-import { Button, Card, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActionArea,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useMachine } from "@xstate/react";
 import { DateTime } from "luxon";
 import {
@@ -110,48 +117,44 @@ const DailyPage = () => {
                   </Stack>
                 </Stack>
               </Card>
-              <Card sx={{ p: 2, opacity: 0.4 }} elevation={3}>
-                <Stack>
-                  <Typography variant="h6">Next Speaker</Typography>
-                  <Typography variant="h5">
-                    {nextSpeaker || "No one yet"}
-                  </Typography>
-                </Stack>
+
+              <Card elevation={3}>
+                <CardActionArea
+                  sx={{ p: 2, opacity: 0.4 }}
+                  onClick={() => {
+                    setSpeakerStopwatch({
+                      start: DateTime.local(),
+                      now: DateTime.local(),
+                      tick: null,
+                    });
+                    if (currentSpeakerIndex === undefined) {
+                      setCurrentSpeakerIndex(0);
+                      setMeetingTimer({
+                        end: DateTime.local().plus({ minutes: 15 }),
+                        now: DateTime.local(),
+                        tick: null,
+                      });
+
+                      return;
+                    }
+                    if (currentSpeakerIndex < filteredSpeakers.length) {
+                      setCurrentSpeakerIndex(currentSpeakerIndex + 1);
+
+                      return;
+                    }
+                  }}
+                >
+                  <Stack>
+                    <Typography variant="h6">Next Speaker</Typography>
+                    <Typography variant="h5">
+                      {nextSpeaker || "Start"}
+                    </Typography>
+                  </Stack>
+                </CardActionArea>
               </Card>
               <Card sx={{ p: 2, ...shouldMeetingEndStyle }}>
                 <Typography variant="h3">{meetingTimerDisplay}</Typography>
               </Card>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setSpeakerStopwatch({
-                    start: DateTime.local(),
-                    now: DateTime.local(),
-                    tick: null,
-                  });
-                  if (currentSpeakerIndex === undefined) {
-                    setCurrentSpeakerIndex(0);
-                    setMeetingTimer({
-                      end: DateTime.local().plus({ minutes: 15 }),
-                      now: DateTime.local(),
-                      tick: null,
-                    });
-
-                    return;
-                  }
-                  if (currentSpeakerIndex < filteredSpeakers.length) {
-                    setCurrentSpeakerIndex(currentSpeakerIndex + 1);
-
-                    return;
-                  }
-                }}
-                disabled={
-                  !!currentSpeakerIndex &&
-                  currentSpeakerIndex >= filteredSpeakers.length
-                }
-              >
-                {currentSpeakerIndex === undefined ? "Start" : "Next"}
-              </Button>
               <Tooltip title="This creates a snapshot to be able to identify problems tomorrow">
                 <Button variant="contained">Create snapshot</Button>
               </Tooltip>

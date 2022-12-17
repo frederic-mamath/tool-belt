@@ -2,21 +2,21 @@ import { Divider, Stack, Typography } from "@mui/material";
 import { groupBy } from "ramda";
 
 import TicketInTruck from "components/TicketInTruck/TicketInTruck";
-import { useGetClearstreamTickets } from "generated/hook";
+import { useGetTickets } from "generated/hook";
 import {
-  ClearstreamTicketOutboundDto,
   ClearstreamTicketOutboundDtoStatus,
+  TicketsOutboundDto,
 } from "generated/model";
 
 const mapByOwnerFirstName = groupBy(
-  (clearstreamTicketOutboundDto: ClearstreamTicketOutboundDto) => {
+  (clearstreamTicketOutboundDto: TicketsOutboundDto) => {
     return clearstreamTicketOutboundDto.ownerFirstName || "Unassigned";
   }
 );
 
 const byTicketStatus = (
-  ticketA: ClearstreamTicketOutboundDto,
-  ticketB: ClearstreamTicketOutboundDto
+  ticketA: TicketsOutboundDto,
+  ticketB: TicketsOutboundDto
 ) => {
   if (ticketA.status === "TO_VALIDATE" && ticketB.status !== "TO_VALIDATE")
     return -1;
@@ -25,13 +25,13 @@ const byTicketStatus = (
 };
 
 const Truck = () => {
-  const getClearstreamTickets = useGetClearstreamTickets({
+  const getTickets = useGetTickets({
     query: {
       refetchInterval: 5000,
     },
   });
 
-  const clearstreamTicketOutboundDto = getClearstreamTickets.data || [];
+  const clearstreamTicketOutboundDto = getTickets.data || [];
   const clearstreamTicketByOwnerFirstName = mapByOwnerFirstName(
     clearstreamTicketOutboundDto
   );
