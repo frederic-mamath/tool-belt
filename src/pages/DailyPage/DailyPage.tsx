@@ -15,15 +15,8 @@ import {
   dailyMachine,
 } from "machines/dailyMachine";
 import { useEffect, useState } from "react";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  Tooltip as RechartsTooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
+import BurndownChart from "components/BurndownChart";
 import Speakers from "components/Speakers";
 import Truck from "components/Truck";
 import { ClearstreamUserOutboundDto } from "generated/model";
@@ -31,7 +24,6 @@ import { ClearstreamUserOutboundDto } from "generated/model";
 import {
   Stopwatch,
   Timer,
-  burndownChartData,
   getCurrentSpeaker,
   getNextSpeaker,
   getStopwatchDiff,
@@ -120,7 +112,12 @@ const DailyPage = () => {
 
               <Card elevation={3}>
                 <CardActionArea
-                  sx={{ p: 2, opacity: 0.4 }}
+                  sx={{
+                    p: 2,
+                    opacity: 0.4,
+                    backgroundColor: "blue",
+                    color: "white",
+                  }}
                   onClick={() => {
                     setSpeakerStopwatch({
                       start: DateTime.local(),
@@ -165,30 +162,7 @@ const DailyPage = () => {
                   Send email
                 </Button>
               </Tooltip>
-              <LineChart width={320} height={200} data={burndownChartData}>
-                <Line
-                  type="monotone"
-                  strokeWidth={2}
-                  dataKey="pointsLeftToDo"
-                  stroke="#8884d8"
-                />
-                <Line
-                  type="monotone"
-                  strokeWidth={2}
-                  dataKey="pointsLeftToDoIfEverythingIsValidated"
-                  stroke="#FFA000"
-                />
-                <Line
-                  type="monotone"
-                  strokeWidth={2}
-                  dataKey="expectedPointsDone"
-                  stroke="#FF0000"
-                />
-                <CartesianGrid stroke="#ccc" />
-                <XAxis dataKey="name" />
-                <YAxis dataKey="expectedPointsDone" />
-                <RechartsTooltip />
-              </LineChart>
+              <BurndownChart />
             </Stack>
           </Stack>
         )}
