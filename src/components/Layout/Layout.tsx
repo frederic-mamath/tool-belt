@@ -40,10 +40,14 @@ const Layout = (props: Props) => {
               <Link to="/daily">
                 <Typography>Daily</Typography>
               </Link>
-              <Link to="/ceremony">
-                <Typography>Ceremony</Typography>
+              <Link to="/sprints">
+                <Typography>Sprints</Typography>
               </Link>
-              <Button onClick={onLogout} variant="contained">
+              <Button
+                sx={{ ml: "auto" }}
+                onClick={onLogout}
+                variant="contained"
+              >
                 Log out
               </Button>
             </>

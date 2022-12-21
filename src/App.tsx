@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "components/Layout";
 import DailyPage from "pages/DailyPage/DailyPage";
 import SignInPage from "pages/SignInPage";
+import SprintPage from "pages/SprintPage";
+import SprintsPage from "pages/SprintsPage";
 import { queryClient } from "services/reactQuery";
 
 const App = () => {
@@ -18,7 +20,8 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<SignInPage />} />
                 <Route path="/daily" element={<DailyPage />} />
-                <Route path="/ceremony" element={<SignInPage />} />
+                <Route path="/sprints" element={<SprintsPage />} />
+                <Route path="/sprints/:sprintId" element={<SprintPage />} />
               </Routes>
             </Layout>
           </BrowserRouter>
