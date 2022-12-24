@@ -4,21 +4,57 @@ import {
   ListItemButton,
   Slider,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useState } from "react";
+import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
 
-import { DEVS } from "./SprintPage.service";
+import {
+  DEVS,
+  SprintCelerityPerDay,
+  updateSprintCelerityPerDay,
+} from "./SprintPage.service";
 
 const SprintPage = () => {
-  const [startOfSprint, setStartOfSprint] = useState<string | null>();
-  const [endOfSprint, setEndOfSprint] = useState<string | null>();
+  const [startOfSprint, setStartOfSprint] = useState<DateTime | null>(
+    DateTime.now()
+  );
+  const [endOfSprint, setEndOfSprint] = useState<DateTime | null>(
+    DateTime.now()
+  );
+  const [sprintCelerityPerDay, setSprintCelerityPerDay] =
+    useState<SprintCelerityPerDay>({});
 
-  console.log({ startOfSprint, endOfSprint });
+  const onChangeStartOfSprint = (value: DateTime | null) => {
+    setStartOfSprint(value);
+  };
+
+  const onChangeEndOfSprint = (value: DateTime | null) => {
+    setEndOfSprint(value);
+  };
+
+  useEffect(() => {
+    if (startOfSprint && endOfSprint) {
+      setSprintCelerityPerDay(
+        updateSprintCelerityPerDay(
+          sprintCelerityPerDay,
+          startOfSprint,
+          endOfSprint
+        )
+      );
+    }
+  }, [startOfSprint, endOfSprint]);
+
+  console.log({ startOfSprint, endOfSprint, sprintCelerityPerDay });
 
   return (
     <LocalizationProvider dateAdapter={AdapterLuxon} disableMaskedInput={true}>
@@ -31,33 +67,51 @@ const SprintPage = () => {
               <DatePicker
                 label="Starts at"
                 value={startOfSprint}
-                onChange={(value) => {
-                  setStartOfSprint(value);
-                }}
+                onChange={onChangeStartOfSprint}
                 renderInput={(params) => <TextField {...params} />}
               />
               <DatePicker
                 label="Ends at"
                 value={endOfSprint}
-                onChange={setEndOfSprint}
+                onChange={onChangeEndOfSprint}
                 renderInput={(params) => <TextField {...params} />}
               />
             </Stack>
           </Stack>
           <div>space for Burndown Chart</div>
         </Stack>
-        <Stack direction="row">
-          {DEVS.map((dev) => (
-            <Stack key={dev.name} flex={1} p={2}>
-              <Typography variant="h6">{dev.name}</Typography>
-              <Slider min={0} step={0.5} defaultValue={5} max={5} marks />
-              <Slider min={0} step={0.5} defaultValue={5} max={5} marks />
-              <Slider min={0} step={0.5} defaultValue={5} max={5} marks />
-              <Slider min={0} step={0.5} defaultValue={5} max={5} marks />
-              <Slider min={0} step={0.5} defaultValue={5} max={5} marks />
-            </Stack>
-          ))}
-        </Stack>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Date</TableCell>
+              {DEVS.map((dev) => (
+                <TableCell key={dev.name}>
+                  <Typography variant="h6">{dev.name}</Typography>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.keys(sprintCelerityPerDay).map((day) => (
+              <TableRow key={day}>
+                <TableCell>{day}</TableCell>
+                {DEVS.map((dev) => (
+                  <>
+                    <TableCell>
+                      <Slider
+                        min={0}
+                        step={0.5}
+                        defaultValue={sprintCelerityPerDay[day][dev.name]}
+                        max={5}
+                        marks
+                      />
+                    </TableCell>
+                  </>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
         <Stack direction="row">
           <Stack flex={1}>
             <Typography variant="h4">Descoped tickets</Typography>
