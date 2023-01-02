@@ -4,8 +4,8 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
-import type { Restaurant } from "./restaurant";
-import type { User } from "./user";
+import type { User } from './user';
+import type { Restaurant } from './restaurant';
 
 export interface Booking {
   id: string;

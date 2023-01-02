@@ -9,7 +9,7 @@ export interface ClearstreamUserOutboundDto {
   id: string;
   clearstreamId: string;
   email: string;
-  isOff: boolean;
+  isOff?: boolean;
   isRegularSpeakersForDailies: boolean;
   clearstreamUserCategory?: string;
   firstName?: string;

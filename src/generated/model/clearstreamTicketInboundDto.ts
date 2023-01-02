@@ -4,10 +4,12 @@
  * OpenAPI definition
  * OpenAPI spec version: v0
  */
+import type { ClearstreamTicketInboundDtoTicketStatus } from './clearstreamTicketInboundDtoTicketStatus';
 
 export interface ClearstreamTicketInboundDto {
   jiraTicketId: string;
   clearstreamUserId: string;
   title: string;
   points?: number;
+  ticketStatus: ClearstreamTicketInboundDtoTicketStatus;
 }

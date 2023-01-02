@@ -69,6 +69,11 @@ const SignInPage = () => {
         <Typography sx={{ textAlign: "center" }} variant="h2">
           Welcome
         </Typography>
+        <Typography sx={{ textAlign: "center" }} variant="body2">
+          Everybody has a different way of doing things. That&apos;s why our web
+          application provides users with an easy way to prepare their daily
+          meetings and technical sprints for teams
+        </Typography>
         <form
           onSubmit={handleSubmit(onSubmit)}
           style={{

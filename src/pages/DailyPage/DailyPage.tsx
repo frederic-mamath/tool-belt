@@ -1,4 +1,11 @@
-import { Button, Card, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActionArea,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useMachine } from "@xstate/react";
 import { DateTime } from "luxon";
 import {
@@ -9,6 +16,7 @@ import {
 } from "machines/dailyMachine";
 import { useEffect, useState } from "react";
 
+import BurndownChart from "components/BurndownChart";
 import Speakers from "components/Speakers";
 import Truck from "components/Truck";
 import { ClearstreamUserOutboundDto } from "generated/model";
@@ -16,28 +24,12 @@ import { ClearstreamUserOutboundDto } from "generated/model";
 import {
   Stopwatch,
   Timer,
+  getCurrentSpeaker,
+  getNextSpeaker,
   getStopwatchDiff,
   getTimerDiff,
   shouldMeetingEnd,
 } from "./DailyPage.service";
-
-const getCurrentSpeaker = (
-  filteredSpeakers: ClearstreamUserOutboundDto[],
-  currentSpeakerIndex?: number
-) => {
-  return currentSpeakerIndex !== undefined
-    ? filteredSpeakers[currentSpeakerIndex]?.firstName || "Done !"
-    : "No one yet";
-};
-
-const getNextSpeaker = (
-  filteredSpeakers: ClearstreamUserOutboundDto[],
-  currentSpeakerIndex?: number
-) => {
-  return currentSpeakerIndex !== undefined
-    ? filteredSpeakers[currentSpeakerIndex + 1]?.firstName || "Let's Go !"
-    : "No one yet";
-};
 
 const DailyPage = () => {
   const [state, send] = useMachine(dailyMachine);
@@ -62,9 +54,7 @@ const DailyPage = () => {
   };
 
   const stopwatch = getStopwatchDiff(speakerStopwatch);
-
   const meetingTimerDisplay = getTimerDiff(meetingTimer);
-
   const shouldMeetingEndStyle = shouldMeetingEnd(meetingTimer)
     ? {
         backgroundColor: "red",
@@ -94,25 +84,18 @@ const DailyPage = () => {
   return (
     <Stack
       sx={{
-        p: {
-          xs: 4,
-          sm: 4,
-        },
-        gap: {
-          xs: 4,
-          sm: 4,
-        },
+        p: 4,
+        gap: 4,
       }}
-      justifyContent="center"
     >
-      <Stack direction="row" gap={4}>
+      <Stack direction="row" gap={2}>
         {state.matches(PICK_PARTICIPANTS_STATE) && (
           <Speakers onStart={onStartDaily} />
         )}
         {state.matches(ON_GOING_STATE) && (
           <Stack direction="row" flex={1} gap={2}>
             <Truck />
-            <Stack gap={4} maxWidth={320}>
+            <Stack gap={2} maxWidth={320}>
               <Card sx={{ flex: 1, p: 2 }} elevation={3}>
                 <Stack sx={{ height: "100%" }}>
                   <Typography variant="h6">Speaker</Typography>
@@ -126,49 +109,60 @@ const DailyPage = () => {
                   </Stack>
                 </Stack>
               </Card>
-              <Card sx={{ flex: 1, p: 2, opacity: 0.4 }} elevation={3}>
-                <Stack>
-                  <Typography variant="h6">Next Speaker</Typography>
-                  <Typography variant="h3">
-                    {nextSpeaker || "No one yet"}
-                  </Typography>
-                </Stack>
+
+              <Card elevation={3}>
+                <CardActionArea
+                  sx={{
+                    p: 2,
+                    opacity: 0.4,
+                    backgroundColor: "blue",
+                    color: "white",
+                  }}
+                  onClick={() => {
+                    setSpeakerStopwatch({
+                      start: DateTime.local(),
+                      now: DateTime.local(),
+                      tick: null,
+                    });
+                    if (currentSpeakerIndex === undefined) {
+                      setCurrentSpeakerIndex(0);
+                      setMeetingTimer({
+                        end: DateTime.local().plus({ minutes: 15 }),
+                        now: DateTime.local(),
+                        tick: null,
+                      });
+
+                      return;
+                    }
+                    if (currentSpeakerIndex < filteredSpeakers.length) {
+                      setCurrentSpeakerIndex(currentSpeakerIndex + 1);
+
+                      return;
+                    }
+                  }}
+                >
+                  <Stack>
+                    <Typography variant="h6">Next Speaker</Typography>
+                    <Typography variant="h5">
+                      {nextSpeaker || "Start"}
+                    </Typography>
+                  </Stack>
+                </CardActionArea>
               </Card>
               <Card sx={{ p: 2, ...shouldMeetingEndStyle }}>
                 <Typography variant="h3">{meetingTimerDisplay}</Typography>
               </Card>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setSpeakerStopwatch({
-                    start: DateTime.local(),
-                    now: DateTime.local(),
-                    tick: null,
-                  });
-                  if (currentSpeakerIndex === undefined) {
-                    setCurrentSpeakerIndex(0);
-                    setMeetingTimer({
-                      end: DateTime.local().plus({ minutes: 15 }),
-                      now: DateTime.local(),
-                      tick: null,
-                    });
-
-                    return;
-                  }
-                  if (currentSpeakerIndex < filteredSpeakers.length) {
-                    setCurrentSpeakerIndex(currentSpeakerIndex + 1);
-
-                    return;
-                  }
-                }}
-                disabled={
-                  !!currentSpeakerIndex &&
-                  currentSpeakerIndex >= filteredSpeakers.length
-                }
-              >
-                {currentSpeakerIndex === undefined ? "Start" : "Next"}
-              </Button>
-              <img src="http://cfcd-2205-jorge.ifs.dev.ams.azu.dbgcloud.io:8000/graph.jpg" />
+              <Tooltip title="This creates a snapshot to be able to identify problems tomorrow">
+                <Button variant="contained" disabled>
+                  Create snapshot
+                </Button>
+              </Tooltip>
+              <Tooltip title="Copy the summary of the daily into an email and sends it to the whole team">
+                <Button variant="contained" disabled>
+                  Send email
+                </Button>
+              </Tooltip>
+              <BurndownChart />
             </Stack>
           </Stack>
         )}
