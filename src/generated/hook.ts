@@ -24,9 +24,6 @@ import type {
   PortfolioContactOutboundDto,
   PortfolioContactInboundDto,
   EmailInboundDto,
-  ClearstreamUserOutboundDto,
-  CreateClearstreamUserOutboundDto,
-  CreateClearstreamUserInboundDto,
   BookingOutboundDto,
   Booking,
   BookingInboundDto,
@@ -379,71 +376,6 @@ export const createEmailFromPortfolio = (
         }
 
       return useMutation<AsyncReturnType<typeof createEmailFromPortfolio>, TError, TVariables, TContext>(mutationFn, mutationOptions)
-    }
-    
-export const getClearstreamUsers = (
-    
- ) => {
-      return customInstance<ClearstreamUserOutboundDto[]>(
-      {url: `/api/clearstream-users`, method: 'get'
-    },
-      );
-    }
-  
-
-export const getGetClearstreamUsersQueryKey = () => [`/api/clearstream-users`];
-
-    
-export const useGetClearstreamUsers = <TData = AsyncReturnType<typeof getClearstreamUsers>, TError = unknown>(
-  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getClearstreamUsers>, TError, TData>, }
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const {query: queryOptions} = options || {}
-
-  const queryKey = queryOptions?.queryKey ?? getGetClearstreamUsersQueryKey();
-
-  
-
-  const queryFn: QueryFunction<AsyncReturnType<typeof getClearstreamUsers>> = () => getClearstreamUsers();
-
-  const query = useQuery<AsyncReturnType<typeof getClearstreamUsers>, TError, TData>(queryKey, queryFn, queryOptions)
-
-  return {
-    queryKey,
-    ...query
-  }
-}
-
-
-export const createClearstreamUser = (
-    createClearstreamUserInboundDto: CreateClearstreamUserInboundDto,
- ) => {
-      return customInstance<CreateClearstreamUserOutboundDto>(
-      {url: `/api/clearstream-users`, method: 'post',
-      data: createClearstreamUserInboundDto
-    },
-      );
-    }
-  
-
-
-    export const useCreateClearstreamUser = <TError = unknown,
-    
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createClearstreamUser>, TError,{data: CreateClearstreamUserInboundDto}, TContext>, }
-) => {
-      const {mutation: mutationOptions} = options || {}
-
-      
-
-
-      const mutationFn: MutationFunction<AsyncReturnType<typeof createClearstreamUser>, {data: CreateClearstreamUserInboundDto}> = (props) => {
-          const {data} = props || {};
-
-          return  createClearstreamUser(data,)
-        }
-
-      return useMutation<AsyncReturnType<typeof createClearstreamUser>, TError, {data: CreateClearstreamUserInboundDto}, TContext>(mutationFn, mutationOptions)
     }
     
 export const getBookings = (
