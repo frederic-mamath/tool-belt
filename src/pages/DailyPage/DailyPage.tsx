@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import BurndownChart from "components/BurndownChart";
 import Speakers from "components/Speakers";
 import Truck from "components/Truck";
-import { ClearstreamUserOutboundDto } from "generated/model";
+import { TeamUserOutboundDto } from "generated/model";
 
 import {
   Stopwatch,
@@ -38,7 +38,7 @@ const DailyPage = () => {
     null
   );
   const [meetingTimer, setMeetingTimer] = useState<Timer | null>(null);
-  const filteredSpeakers: ClearstreamUserOutboundDto[] =
+  const filteredSpeakers: TeamUserOutboundDto[] =
     state.context.validatedSpeakers;
 
   const currentSpeaker = getCurrentSpeaker(
@@ -47,9 +47,7 @@ const DailyPage = () => {
   );
   const nextSpeaker = getNextSpeaker(filteredSpeakers, currentSpeakerIndex);
 
-  const onStartDaily = (
-    shuffledAndFilteredUsers: ClearstreamUserOutboundDto[]
-  ) => {
+  const onStartDaily = (shuffledAndFilteredUsers: TeamUserOutboundDto[]) => {
     send(NEXT_EVENT, { validatedSpeakers: shuffledAndFilteredUsers });
   };
 

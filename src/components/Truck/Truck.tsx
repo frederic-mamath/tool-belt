@@ -3,15 +3,11 @@ import { groupBy } from "ramda";
 
 import TicketInTruck from "components/TicketInTruck/TicketInTruck";
 import { useGetTickets } from "generated/hook";
-import {
-  ClearstreamTicketOutboundDtoStatus,
-  TicketsOutboundDto,
-  TicketsOutboundDtoStatus,
-} from "generated/model";
+import { TicketsOutboundDto, TicketsOutboundDtoStatus } from "generated/model";
 
 const mapByOwnerFirstName = groupBy(
-  (clearstreamTicketOutboundDto: TicketsOutboundDto) => {
-    return clearstreamTicketOutboundDto.ownerFirstName || "Unassigned";
+  (TicketsOutboundDtoStatus: TicketsOutboundDto) => {
+    return TicketsOutboundDtoStatus.ownerFirstName || "Unassigned";
   }
 );
 
@@ -32,39 +28,30 @@ const Truck = () => {
     },
   });
 
-  const clearstreamTicketOutboundDto = getTickets.data || [];
-  const clearstreamTicketByOwnerFirstName = mapByOwnerFirstName(
-    clearstreamTicketOutboundDto
-  );
+  const ticketOutboundDto = getTickets.data || [];
+  const ticketByOwnerFirstName = mapByOwnerFirstName(ticketOutboundDto);
 
   return (
     <Stack>
       <Stack direction="row" gap={2} flex={1}>
-        {Object.keys(clearstreamTicketByOwnerFirstName)
+        {Object.keys(ticketByOwnerFirstName)
           .sort()
           .map((user: string) => {
-            const clearstreamTickets = clearstreamTicketByOwnerFirstName[user];
-            const dailyPointsCount = clearstreamTickets.reduce(
-              (acc, clearstreamTicket) => {
-                if (!clearstreamTicket.ticketPoint) return acc;
+            const tickets = ticketByOwnerFirstName[user];
+            const dailyPointsCount = tickets.reduce((acc, ticket) => {
+              if (!ticket.ticketPoint) return acc;
 
-                return acc + clearstreamTicket.ticketPoint;
-              },
-              0
-            );
-            const dailyPointsToValidateCount = clearstreamTickets.reduce(
-              (acc, clearstreamTicket) => {
-                if (
-                  !clearstreamTicket.ticketPoint ||
-                  clearstreamTicket.status !==
-                    ClearstreamTicketOutboundDtoStatus.TO_VALIDATE
-                )
-                  return acc;
+              return acc + ticket.ticketPoint;
+            }, 0);
+            const dailyPointsToValidateCount = tickets.reduce((acc, ticket) => {
+              if (
+                !ticket.ticketPoint ||
+                ticket.status !== TicketsOutboundDtoStatus.TO_VALIDATE
+              )
+                return acc;
 
-                return acc + clearstreamTicket.ticketPoint;
-              },
-              0
-            );
+              return acc + ticket.ticketPoint;
+            }, 0);
 
             return (
               <Stack
@@ -82,16 +69,14 @@ const Truck = () => {
                   </Typography>
                 </Stack>
                 <Divider />
-                {clearstreamTickets
-                  .sort(byTicketStatus)
-                  .map((clearstreamTicket) => {
-                    return (
-                      <TicketInTruck
-                        key={clearstreamTicket.clearstreamTicketId}
-                        clearstreamTicket={clearstreamTicket}
-                      />
-                    );
-                  })}
+                {tickets.sort(byTicketStatus).map((ticket) => {
+                  return (
+                    <TicketInTruck
+                      key={ticket.sourceTicketId}
+                      ticket={ticket}
+                    />
+                  );
+                })}
               </Stack>
             );
           })}
@@ -100,8 +85,8 @@ const Truck = () => {
       <Stack direction="row" gap={2}>
         Legend
         <TicketInTruck
-          clearstreamTicket={{
-            clearstreamTicketId: "X",
+          ticket={{
+            sourceTicketId: "X",
             ticketId: "Y",
             ticketTitle: "To be shipped at the end of the day",
             status: TicketsOutboundDtoStatus.TO_DO,
@@ -111,8 +96,8 @@ const Truck = () => {
           }}
         />
         <TicketInTruck
-          clearstreamTicket={{
-            clearstreamTicketId: "X",
+          ticket={{
+            sourceTicketId: "X",
             ticketId: "Y",
             ticketTitle: "To be validated",
             status: TicketsOutboundDtoStatus.TO_VALIDATE,
@@ -122,8 +107,8 @@ const Truck = () => {
           }}
         />
         <TicketInTruck
-          clearstreamTicket={{
-            clearstreamTicketId: "X",
+          ticket={{
+            sourceTicketId: "X",
             ticketId: "Y",
             ticketTitle:
               "Was already there yesterday and still not to validate",

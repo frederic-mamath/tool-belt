@@ -5,13 +5,12 @@
  * OpenAPI spec version: v0
  */
 
-export interface ClearstreamUserOutboundDto {
+export interface TeamUserOutboundDto {
   id: string;
-  clearstreamId: string;
   email: string;
   isOff?: boolean;
   isRegularSpeakersForDailies: boolean;
-  clearstreamUserCategory?: string;
+  userCategory?: string;
   firstName?: string;
   lastName?: string;
 }

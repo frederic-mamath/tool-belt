@@ -1,6 +1,6 @@
 import { assign, createMachine } from "xstate";
 
-import { ClearstreamUserOutboundDto } from "generated/model";
+import { TeamUserOutboundDto } from "generated/model";
 
 export const PICK_PARTICIPANTS_STATE = "PICK_PARTICIPANTS";
 export const ON_GOING_STATE = "ON_GOING";
@@ -12,15 +12,15 @@ export const QUESTION_EVENT = "QUESTION";
 export const RESUME_EVENT = "RESUME";
 
 interface DailyMachineContext {
-  users: ClearstreamUserOutboundDto[];
-  orderedSpeakers: ClearstreamUserOutboundDto[];
-  validatedSpeakers: ClearstreamUserOutboundDto[];
+  users: TeamUserOutboundDto[];
+  orderedSpeakers: TeamUserOutboundDto[];
+  validatedSpeakers: TeamUserOutboundDto[];
   currentSpeakerId: string | null;
   nextSpeakerId: string | null;
 }
 
 type DailyMachineEvents =
-  | { type: typeof NEXT_EVENT; validatedSpeakers: ClearstreamUserOutboundDto[] }
+  | { type: typeof NEXT_EVENT; validatedSpeakers: TeamUserOutboundDto[] }
   | { type: typeof QUESTION_EVENT }
   | { type: typeof RESUME_EVENT };
 

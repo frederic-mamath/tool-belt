@@ -12,4 +12,5 @@ export interface User {
   lastName?: string;
   createdAt: string;
   password: string;
+  isSuperAdmin?: boolean;
 }
