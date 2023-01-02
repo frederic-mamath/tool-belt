@@ -1,9 +1,6 @@
 import { Card } from "@mui/material";
 
-import {
-  ClearstreamTicketOutboundDtoStatus,
-  TicketsOutboundDto,
-} from "generated/model";
+import { TicketsOutboundDto, TicketsOutboundDtoStatus } from "generated/model";
 
 import {
   getIsProblemSolvingMaterial,
@@ -11,14 +8,13 @@ import {
 } from "./TicketInTruck.service";
 
 interface Props {
-  clearstreamTicket: TicketsOutboundDto;
+  ticket: TicketsOutboundDto;
 }
 
 const TicketInTruck = (props: Props) => {
-  const { clearstreamTicket } = props;
+  const { ticket } = props;
 
-  const isToValidate =
-    clearstreamTicket.status === ClearstreamTicketOutboundDtoStatus.TO_VALIDATE;
+  const isToValidate = ticket.status === TicketsOutboundDtoStatus.TO_VALIDATE;
 
   return (
     <Card
@@ -29,12 +25,10 @@ const TicketInTruck = (props: Props) => {
           backgroundColor: "lightblue",
         },
         ...getIsToValidateStyle(isToValidate),
-        ...getIsProblemSolvingMaterial(
-          clearstreamTicket.isProblemSolvingMaterial
-        ),
+        ...getIsProblemSolvingMaterial(ticket.isProblemSolvingMaterial),
       }}
     >
-      {clearstreamTicket.ticketPoint} - {clearstreamTicket.ticketTitle}
+      {ticket.ticketPoint} - {ticket.ticketTitle}
     </Card>
   );
 };
