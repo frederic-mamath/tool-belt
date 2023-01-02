@@ -1,6 +1,6 @@
-import { ClearstreamUserOutboundDto } from "generated/model";
+import { TeamUserOutboundDto } from "generated/model";
 
-export const getCheckedWorkers = (workers: ClearstreamUserOutboundDto[]) => {
+export const getCheckedWorkers = (workers: TeamUserOutboundDto[]) => {
   return workers.filter((worker) => {
     if (worker.isOff) {
       return true;
@@ -15,7 +15,7 @@ export const getCheckedWorkers = (workers: ClearstreamUserOutboundDto[]) => {
 };
 
 export const getFilteredSpeakers = (
-  workers: ClearstreamUserOutboundDto[],
+  workers: TeamUserOutboundDto[],
   filteredWorkerIds: string[]
 ) => {
   return workers.filter((worker) => !filteredWorkerIds.includes(worker.id));

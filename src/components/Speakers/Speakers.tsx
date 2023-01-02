@@ -19,39 +19,39 @@ import {
 import { append, groupBy, without } from "ramda";
 import { MouseEventHandler, useEffect, useState } from "react";
 
-import { useGetClearstreamUsers } from "generated/hook";
-import { ClearstreamUserOutboundDto } from "generated/model";
+import { useGetTeamUsers } from "generated/hook";
+import { TeamUserOutboundDto } from "generated/model";
 import { shuffle } from "services/array";
 
 import { getCheckedWorkers, getFilteredSpeakers } from "./Speakers.service";
 
 interface Props {
-  onStart: (workers: ClearstreamUserOutboundDto[]) => void;
+  onStart: (workers: TeamUserOutboundDto[]) => void;
 }
 
-const mapByClearstreamUserCategory = groupBy(
-  (clearstreamUserOutboundDto: ClearstreamUserOutboundDto) => {
-    return clearstreamUserOutboundDto.clearstreamUserCategory || "other";
+const mapByTeamUserCategory = groupBy(
+  (teamUserOutboundDto: TeamUserOutboundDto) => {
+    return teamUserOutboundDto.clearstreamUserCategory || "other";
   }
 );
 
 const Speakers = (props: Props) => {
   const { onStart } = props;
-  const getClearstreamUsers = useGetClearstreamUsers();
+  const getClearstreamUsers = useGetTeamUsers();
   const clearstreamUsers = getClearstreamUsers.data || [];
   const [clearstreamUsersById, setClearstreamUsersById] = useState<{
-    [categoryId: string]: ClearstreamUserOutboundDto[];
+    [categoryId: string]: TeamUserOutboundDto[];
   }>({});
-  const [speakersOrdered, setSpeakersOrdered] = useState<
-    ClearstreamUserOutboundDto[]
-  >(shuffle(clearstreamUsers));
+  const [speakersOrdered, setSpeakersOrdered] = useState<TeamUserOutboundDto[]>(
+    shuffle(clearstreamUsers)
+  );
   const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>([]);
 
   console.log({ filteredSpeakerIds });
 
   useEffect(() => {
     if (clearstreamUsers.length > 0) {
-      setClearstreamUsersById(mapByClearstreamUserCategory(clearstreamUsers));
+      setClearstreamUsersById(mapByTeamUserCategory(clearstreamUsers));
       setSpeakersOrdered(clearstreamUsers);
       setFilteredSpeakerIds(
         getCheckedWorkers(clearstreamUsers).map(
@@ -70,23 +70,17 @@ const Speakers = (props: Props) => {
     setMenuAnchor(null);
   };
 
-  const onClickToggleSpeaker = (
-    clearstreamUserOutboundDto: ClearstreamUserOutboundDto
-  ) => {
-    const currentIndex = filteredSpeakerIds.indexOf(
-      clearstreamUserOutboundDto.id
-    );
+  const onClickToggleSpeaker = (teamUserOutboundDto: TeamUserOutboundDto) => {
+    const currentIndex = filteredSpeakerIds.indexOf(teamUserOutboundDto.id);
 
     if (currentIndex === -1) {
-      setFilteredSpeakerIds(
-        append(clearstreamUserOutboundDto.id, filteredSpeakerIds)
-      );
+      setFilteredSpeakerIds(append(teamUserOutboundDto.id, filteredSpeakerIds));
 
       return;
     }
 
     setFilteredSpeakerIds(
-      without([clearstreamUserOutboundDto.id], filteredSpeakerIds)
+      without([teamUserOutboundDto.id], filteredSpeakerIds)
     );
   };
 

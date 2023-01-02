@@ -5,7 +5,7 @@
  * OpenAPI spec version: v0
  */
 
-export interface ClearstreamUserOutboundDto {
+export interface TeamUserOutboundDto {
   id: string;
   clearstreamId: string;
   email: string;

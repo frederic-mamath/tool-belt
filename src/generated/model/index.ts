@@ -21,3 +21,4 @@ export * from "./recipeOutboundDto";
 export * from "./connectedUserOutboundDto";
 export * from "./ticketsOutboundDtoStatus";
 export * from "./ticketsOutboundDto";
+export * from './teamUserOutboundDto';

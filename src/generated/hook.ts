@@ -27,6 +27,7 @@ import type {
   BookingOutboundDto,
   Booking,
   BookingInboundDto,
+  TeamUserOutboundDto,
   ConnectedUserOutboundDto,
   TicketsOutboundDto,
   RestaurantOutboundDto,
@@ -472,6 +473,41 @@ export const confirmBooking = (
       return useMutation<AsyncReturnType<typeof confirmBooking>, TError, {bookingId: string}, TContext>(mutationFn, mutationOptions)
     }
     
+export const getTeamUsers = (
+    
+ ) => {
+      return customInstance<TeamUserOutboundDto[]>(
+      {url: `/api/users`, method: 'get'
+    },
+      );
+    }
+  
+
+export const getGetTeamUsersQueryKey = () => [`/api/users`];
+
+    
+export const useGetTeamUsers = <TData = AsyncReturnType<typeof getTeamUsers>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getTeamUsers>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetTeamUsersQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getTeamUsers>> = () => getTeamUsers();
+
+  const query = useQuery<AsyncReturnType<typeof getTeamUsers>, TError, TData>(queryKey, queryFn, queryOptions)
+
+  return {
+    queryKey,
+    ...query
+  }
+}
+
+
 export const getConnectedUser = (
     
  ) => {
