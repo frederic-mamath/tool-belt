@@ -27,15 +27,13 @@ import type {
   ClearstreamUserOutboundDto,
   CreateClearstreamUserOutboundDto,
   CreateClearstreamUserInboundDto,
-  ClearstreamTicketOutboundDto,
-  CreateClearstreamTicketsInboundDto,
   BookingOutboundDto,
   Booking,
   BookingInboundDto,
   ConnectedUserOutboundDto,
+  TicketsOutboundDto,
   RestaurantOutboundDto,
-  PhilipsHueLightOutboundDto,
-  TicketsOutboundDto
+  PhilipsHueLightOutboundDto
 } from './model'
 import { customInstance } from '../services/network'
 
@@ -448,103 +446,6 @@ export const createClearstreamUser = (
       return useMutation<AsyncReturnType<typeof createClearstreamUser>, TError, {data: CreateClearstreamUserInboundDto}, TContext>(mutationFn, mutationOptions)
     }
     
-/**
- * @deprecated
- */
-export const getClearstreamTickets = (
-    
- ) => {
-      return customInstance<ClearstreamTicketOutboundDto[]>(
-      {url: `/api/clearstream-tickets`, method: 'get'
-    },
-      );
-    }
-  
-
-export const getGetClearstreamTicketsQueryKey = () => [`/api/clearstream-tickets`];
-
-    
-export const useGetClearstreamTickets = <TData = AsyncReturnType<typeof getClearstreamTickets>, TError = unknown>(
-  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getClearstreamTickets>, TError, TData>, }
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const {query: queryOptions} = options || {}
-
-  const queryKey = queryOptions?.queryKey ?? getGetClearstreamTicketsQueryKey();
-
-  
-
-  const queryFn: QueryFunction<AsyncReturnType<typeof getClearstreamTickets>> = () => getClearstreamTickets();
-
-  const query = useQuery<AsyncReturnType<typeof getClearstreamTickets>, TError, TData>(queryKey, queryFn, queryOptions)
-
-  return {
-    queryKey,
-    ...query
-  }
-}
-
-
-export const createTodayClearstreamTickets = (
-    createClearstreamTicketsInboundDto: CreateClearstreamTicketsInboundDto,
- ) => {
-      return customInstance<ClearstreamTicketOutboundDto[]>(
-      {url: `/api/clearstream-tickets`, method: 'post',
-      data: createClearstreamTicketsInboundDto
-    },
-      );
-    }
-  
-
-
-    export const useCreateTodayClearstreamTickets = <TError = unknown,
-    
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof createTodayClearstreamTickets>, TError,{data: CreateClearstreamTicketsInboundDto}, TContext>, }
-) => {
-      const {mutation: mutationOptions} = options || {}
-
-      
-
-
-      const mutationFn: MutationFunction<AsyncReturnType<typeof createTodayClearstreamTickets>, {data: CreateClearstreamTicketsInboundDto}> = (props) => {
-          const {data} = props || {};
-
-          return  createTodayClearstreamTickets(data,)
-        }
-
-      return useMutation<AsyncReturnType<typeof createTodayClearstreamTickets>, TError, {data: CreateClearstreamTicketsInboundDto}, TContext>(mutationFn, mutationOptions)
-    }
-    
-export const confirmTodayClearstreamTickets = (
-    
- ) => {
-      return customInstance<void>(
-      {url: `/api/clearstream-tickets`, method: 'patch'
-    },
-      );
-    }
-  
-
-
-    export const useConfirmTodayClearstreamTickets = <TError = unknown,
-    TVariables = void,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof confirmTodayClearstreamTickets>, TError,TVariables, TContext>, }
-) => {
-      const {mutation: mutationOptions} = options || {}
-
-      
-
-
-      const mutationFn: MutationFunction<AsyncReturnType<typeof confirmTodayClearstreamTickets>, TVariables> = () => {
-          ;
-
-          return  confirmTodayClearstreamTickets()
-        }
-
-      return useMutation<AsyncReturnType<typeof confirmTodayClearstreamTickets>, TError, TVariables, TContext>(mutationFn, mutationOptions)
-    }
-    
 export const getBookings = (
     
  ) => {
@@ -674,6 +575,41 @@ export const useGetConnectedUser = <TData = AsyncReturnType<typeof getConnectedU
 }
 
 
+export const getTickets = (
+    
+ ) => {
+      return customInstance<TicketsOutboundDto[]>(
+      {url: `/api/tickets`, method: 'get'
+    },
+      );
+    }
+  
+
+export const getGetTicketsQueryKey = () => [`/api/tickets`];
+
+    
+export const useGetTickets = <TData = AsyncReturnType<typeof getTickets>, TError = unknown>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getTickets>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetTicketsQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof getTickets>> = () => getTickets();
+
+  const query = useQuery<AsyncReturnType<typeof getTickets>, TError, TData>(queryKey, queryFn, queryOptions)
+
+  return {
+    queryKey,
+    ...query
+  }
+}
+
+
 export const getRestaurants = (
     
  ) => {
@@ -771,41 +707,6 @@ export const useGetHealth = <TData = AsyncReturnType<typeof getHealth>, TError =
   const queryFn: QueryFunction<AsyncReturnType<typeof getHealth>> = () => getHealth();
 
   const query = useQuery<AsyncReturnType<typeof getHealth>, TError, TData>(queryKey, queryFn, queryOptions)
-
-  return {
-    queryKey,
-    ...query
-  }
-}
-
-
-export const getTickets = (
-    
- ) => {
-      return customInstance<TicketsOutboundDto[]>(
-      {url: `/api/clearstream-tickets/v2`, method: 'get'
-    },
-      );
-    }
-  
-
-export const getGetTicketsQueryKey = () => [`/api/clearstream-tickets/v2`];
-
-    
-export const useGetTickets = <TData = AsyncReturnType<typeof getTickets>, TError = unknown>(
-  options?: { query?:UseQueryOptions<AsyncReturnType<typeof getTickets>, TError, TData>, }
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const {query: queryOptions} = options || {}
-
-  const queryKey = queryOptions?.queryKey ?? getGetTicketsQueryKey();
-
-  
-
-  const queryFn: QueryFunction<AsyncReturnType<typeof getTickets>> = () => getTickets();
-
-  const query = useQuery<AsyncReturnType<typeof getTickets>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
