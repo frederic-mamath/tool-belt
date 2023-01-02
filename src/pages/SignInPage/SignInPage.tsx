@@ -46,7 +46,7 @@ const SignInPage = () => {
       authenticationCtx.setIsAuthenticated(true);
       authenticationCtx.setConnectedUser({
         email: "frederic.mamath@gmail.com",
-        isClearstreamUser: false,
+        isUserFrom: [],
       });
       navigate("/daily");
 

@@ -7,5 +7,5 @@
 
 export interface ConnectedUserOutboundDto {
   email: string;
-  isClearstreamUser: boolean;
+  isUserFrom: string[];
 }

@@ -72,7 +72,7 @@ const Truck = () => {
                 {tickets.sort(byTicketStatus).map((ticket) => {
                   return (
                     <TicketInTruck
-                      key={ticket.clearstreamTicketId}
+                      key={ticket.sourceTicketId}
                       ticket={ticket}
                     />
                   );
@@ -86,7 +86,7 @@ const Truck = () => {
         Legend
         <TicketInTruck
           ticket={{
-            clearstreamTicketId: "X",
+            sourceTicketId: "X",
             ticketId: "Y",
             ticketTitle: "To be shipped at the end of the day",
             status: TicketsOutboundDtoStatus.TO_DO,
@@ -97,7 +97,7 @@ const Truck = () => {
         />
         <TicketInTruck
           ticket={{
-            clearstreamTicketId: "X",
+            sourceTicketId: "X",
             ticketId: "Y",
             ticketTitle: "To be validated",
             status: TicketsOutboundDtoStatus.TO_VALIDATE,
@@ -108,7 +108,7 @@ const Truck = () => {
         />
         <TicketInTruck
           ticket={{
-            clearstreamTicketId: "X",
+            sourceTicketId: "X",
             ticketId: "Y",
             ticketTitle:
               "Was already there yesterday and still not to validate",

@@ -1,6 +1,6 @@
 import { DateTime, Duration } from "luxon";
 
-import { ClearstreamUserOutboundDto } from "generated/model";
+import { TeamUserOutboundDto } from "generated/model";
 
 export interface Stopwatch {
   start: DateTime;
@@ -45,7 +45,7 @@ export const getStopwatchDiff = (stopwatch: Stopwatch | null) => {
 };
 
 export const getCurrentSpeaker = (
-  filteredSpeakers: ClearstreamUserOutboundDto[],
+  filteredSpeakers: TeamUserOutboundDto[],
   currentSpeakerIndex?: number
 ) => {
   return currentSpeakerIndex !== undefined
@@ -54,7 +54,7 @@ export const getCurrentSpeaker = (
 };
 
 export const getNextSpeaker = (
-  filteredSpeakers: ClearstreamUserOutboundDto[],
+  filteredSpeakers: TeamUserOutboundDto[],
   currentSpeakerIndex?: number
 ) => {
   return currentSpeakerIndex !== undefined

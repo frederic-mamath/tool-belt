@@ -7,11 +7,10 @@
 
 export interface TeamUserOutboundDto {
   id: string;
-  clearstreamId: string;
   email: string;
   isOff?: boolean;
   isRegularSpeakersForDailies: boolean;
-  clearstreamUserCategory?: string;
+  userCategory?: string;
   firstName?: string;
   lastName?: string;
 }

@@ -31,35 +31,33 @@ interface Props {
 
 const mapByTeamUserCategory = groupBy(
   (teamUserOutboundDto: TeamUserOutboundDto) => {
-    return teamUserOutboundDto.clearstreamUserCategory || "other";
+    return teamUserOutboundDto.userCategory || "other";
   }
 );
 
 const Speakers = (props: Props) => {
   const { onStart } = props;
-  const getClearstreamUsers = useGetTeamUsers();
-  const clearstreamUsers = getClearstreamUsers.data || [];
-  const [clearstreamUsersById, setClearstreamUsersById] = useState<{
+  const getTeamUsers = useGetTeamUsers();
+  const teamUsers = getTeamUsers.data || [];
+  const [teamUsersById, setTeamUsersById] = useState<{
     [categoryId: string]: TeamUserOutboundDto[];
   }>({});
   const [speakersOrdered, setSpeakersOrdered] = useState<TeamUserOutboundDto[]>(
-    shuffle(clearstreamUsers)
+    shuffle(teamUsers)
   );
   const [filteredSpeakerIds, setFilteredSpeakerIds] = useState<string[]>([]);
 
-  console.log({ filteredSpeakerIds });
-
   useEffect(() => {
-    if (clearstreamUsers.length > 0) {
-      setClearstreamUsersById(mapByTeamUserCategory(clearstreamUsers));
-      setSpeakersOrdered(clearstreamUsers);
+    if (teamUsers.length > 0) {
+      setTeamUsersById(mapByTeamUserCategory(teamUsers));
+      setSpeakersOrdered(teamUsers);
       setFilteredSpeakerIds(
-        getCheckedWorkers(clearstreamUsers).map(
-          (clearstreamUserOutboundDto) => clearstreamUserOutboundDto.id
+        getCheckedWorkers(teamUsers).map(
+          (teamUserOutboundDto) => teamUserOutboundDto.id
         )
       );
     }
-  }, [clearstreamUsers]);
+  }, [teamUsers]);
   const [menuAnchor, setMenuAnchor] = useState<HTMLButtonElement | null>(null);
 
   const onClickMore: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -85,7 +83,7 @@ const Speakers = (props: Props) => {
   };
 
   const onShuffleSpeakers = () => {
-    setSpeakersOrdered(shuffle(clearstreamUsers));
+    setSpeakersOrdered(shuffle(teamUsers));
   };
 
   return (
@@ -115,42 +113,38 @@ const Speakers = (props: Props) => {
         <MenuItem disabled>Check by role</MenuItem>
       </Menu>
       <Stack direction={{ sm: "column", md: "row" }}>
-        {Object.keys(clearstreamUsersById).map((clearstreamUserCategory) => (
+        {Object.keys(teamUsersById).map((userCategory) => (
           <List
-            key={`daily-clearstream-user-category-${clearstreamUserCategory}`}
+            key={`daily-team-user-category-${userCategory}`}
             subheader={
               <ListSubheader component="div" id="nested-list-subheader">
-                {clearstreamUserCategory}
+                {userCategory}
               </ListSubheader>
             }
           >
-            {clearstreamUsersById[clearstreamUserCategory].map(
-              (clearstreamUser) => (
-                <ListItem key={clearstreamUser.id} sx={{ height: 40 }}>
-                  <ListItemButton
-                    disabled={clearstreamUser.isOff}
-                    onClick={() => onClickToggleSpeaker(clearstreamUser)}
-                    dense
-                  >
-                    <ListItemIcon>
-                      <Checkbox
-                        edge="start"
-                        checked={
-                          !filteredSpeakerIds.includes(clearstreamUser.id)
-                        }
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ "aria-labelledby": clearstreamUser.id }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      id={clearstreamUser.id}
-                      primary={clearstreamUser.firstName || "unknown"}
+            {teamUsersById[userCategory].map((teamUser) => (
+              <ListItem key={teamUser.id} sx={{ height: 40 }}>
+                <ListItemButton
+                  disabled={teamUser.isOff}
+                  onClick={() => onClickToggleSpeaker(teamUser)}
+                  dense
+                >
+                  <ListItemIcon>
+                    <Checkbox
+                      edge="start"
+                      checked={!filteredSpeakerIds.includes(teamUser.id)}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{ "aria-labelledby": teamUser.id }}
                     />
-                  </ListItemButton>
-                </ListItem>
-              )
-            )}
+                  </ListItemIcon>
+                  <ListItemText
+                    id={teamUser.id}
+                    primary={teamUser.firstName || "unknown"}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
           </List>
         ))}
       </Stack>

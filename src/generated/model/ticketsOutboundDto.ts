@@ -7,7 +7,7 @@
 import type { TicketsOutboundDtoStatus } from './ticketsOutboundDtoStatus';
 
 export interface TicketsOutboundDto {
-  clearstreamTicketId: string;
+  sourceTicketId: string;
   ticketId: string;
   ownerFirstName?: string;
   ticketTitle?: string;
