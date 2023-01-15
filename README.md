@@ -2,6 +2,17 @@
 
 The frontend app is now going open-source !
 
+## Getting started
+
+- npm install
+- npm start
+
+### Requirement
+
+- need to build your api based on generated/hook
+- output types can be found in generated/model
+- run your backend on port 8080
+
 ## Road Map
 
 - [ ] Add documentation for Tool Belt
