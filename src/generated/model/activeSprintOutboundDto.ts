@@ -5,10 +5,10 @@
  * OpenAPI spec version: v0
  */
 
-export interface Restaurant {
-  id: string;
+export interface ActiveSprintOutboundDto {
+  goal: string;
+  budget: number;
+  startsAt: string;
+  endsAt: string;
   name: string;
-  availableSeatCount: number;
-  createdAt: string;
-  updatedAt: string;
 }

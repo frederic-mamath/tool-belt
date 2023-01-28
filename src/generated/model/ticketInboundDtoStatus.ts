@@ -5,11 +5,11 @@
  * OpenAPI spec version: v0
  */
 
-export type TicketsOutboundDtoStatus = typeof TicketsOutboundDtoStatus[keyof typeof TicketsOutboundDtoStatus];
+export type TicketInboundDtoStatus = typeof TicketInboundDtoStatus[keyof typeof TicketInboundDtoStatus];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const TicketsOutboundDtoStatus = {
+export const TicketInboundDtoStatus = {
   TO_DO: 'TO_DO',
   DOING: 'DOING',
   CODE_REVIEW: 'CODE_REVIEW',

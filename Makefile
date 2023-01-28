@@ -6,4 +6,4 @@ frontend-push:
 # with sudo cp -r tool-belt/build/* /var/www/tool-belt/html/
 
 codegen-api:
-	orval --config ./orval.config.js
+	npx orval --config ./orval.config.js
