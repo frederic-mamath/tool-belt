@@ -7,32 +7,36 @@ import {
   YAxis,
 } from "recharts";
 
-import { burndownChartData } from "./BurndownChart.service";
+import { useGetActiveSprintBurndownChart } from "generated/hook";
+
+// import { burndownChartData } from "./BurndownChart.service";
 
 const BurndownChart = () => {
+  const { data } = useGetActiveSprintBurndownChart();
+  
   return (
-    <LineChart width={320} height={200} data={burndownChartData}>
+    <LineChart width={320} height={200} data={data}>
       <Line
         type="monotone"
         strokeWidth={2}
-        dataKey="pointsLeftToDo"
+        dataKey="pointsShippedCount"
         stroke="#8884d8"
       />
       <Line
         type="monotone"
         strokeWidth={2}
-        dataKey="pointsLeftToDoIfEverythingIsValidated"
+        dataKey="pointsIfNoValidationReturnCount"
         stroke="#FFA000"
       />
       <Line
         type="monotone"
         strokeWidth={2}
-        dataKey="expectedPointsDone"
+        dataKey="target"
         stroke="#FF0000"
       />
       <CartesianGrid stroke="#ccc" />
-      <XAxis dataKey="name" />
-      <YAxis dataKey="expectedPointsDone" />
+      <XAxis dataKey="date" />
+      <YAxis dataKey="target" />
       <RechartsTooltip />
     </LineChart>
   );
