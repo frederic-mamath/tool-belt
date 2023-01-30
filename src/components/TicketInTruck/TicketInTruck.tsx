@@ -1,8 +1,9 @@
-import { Card } from "@mui/material";
+import { Badge, Card, Chip, Stack } from "@mui/material";
 
 import { TicketsOutboundDto, TicketsOutboundDtoStatus } from "generated/model";
 
 import {
+  getFilteredTicketName,
   getIsProblemSolvingMaterial,
   getIsToValidateStyle,
 } from "./TicketInTruck.service";
@@ -14,22 +15,47 @@ interface Props {
 const TicketInTruck = (props: Props) => {
   const { ticket } = props;
 
+  if (!ticket.ticketTitle) {
+    return null;
+  }
+
   const isToValidate = ticket.status === TicketsOutboundDtoStatus.TO_VALIDATE;
 
+  const ticketNameFiltered = getFilteredTicketName(ticket.ticketTitle);
+
   return (
-    <Card
-      sx={{
-        p: 2,
-        "&:hover": {
-          cursor: "pointer",
-          backgroundColor: "lightblue",
-        },
-        ...getIsToValidateStyle(isToValidate),
-        ...getIsProblemSolvingMaterial(ticket.isProblemSolvingMaterial),
-      }}
+    <Badge
+      anchorOrigin={{ vertical: "top", horizontal: "left" }}
+      badgeContent={ticket.ticketPoint}
+      color="primary"
     >
-      {ticket.ticketPoint} - {ticket.ticketTitle}
-    </Card>
+      <Card
+        sx={{
+          p: 2,
+          fontSize: "12px",
+          "&:hover": {
+            cursor: "pointer",
+            backgroundColor: "lightblue",
+          },
+          ...getIsToValidateStyle(isToValidate),
+          ...getIsProblemSolvingMaterial(ticket.isProblemSolvingMaterial),
+        }}
+      >
+        <Stack gap={1}>
+          <div>{ticketNameFiltered.filteredTicketName}</div>
+          <Stack direction="row">
+            {ticketNameFiltered.isInvestigation ? (
+              <Chip
+                color="primary"
+                variant="filled"
+                label="Investigation"
+                sx={{ height: "16px", fontSize: "12px" }}
+              />
+            ) : null}
+          </Stack>
+        </Stack>
+      </Card>
+    </Badge>
   );
 };
 
