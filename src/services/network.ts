@@ -21,6 +21,13 @@ axiosClient.interceptors.response.use(
 
     if (!axiosError.response) return;
 
+    if (500 === axiosError.response.status) {
+      if (axiosError.config?.url?.match(/api\/login/gm)) {
+        enqueueSnackbar("The server needs to be started", { variant: "error" });
+
+        return;
+      }
+    }
     if (401 === axiosError.response.status) {
       if (axiosError.config?.url?.match(/api\/login/gm)) {
         enqueueSnackbar("Invalid credentials", { variant: "error" });
