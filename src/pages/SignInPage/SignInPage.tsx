@@ -31,27 +31,26 @@ const SignInPage = () => {
     formData.append("email", email);
     formData.append("password", password);
 
-    const response = await axiosClient({
-      method: "post",
-      url: "/api/login",
-      data: formData,
-    });
-
-    if (!response) {
-      return;
-    }
-
-    if (response.status === 200) {
-      enqueueSnackbar("You are signed in !", { variant: "success" });
-      authenticationCtx.setIsAuthenticated(true);
-      authenticationCtx.setConnectedUser({
-        email: "frederic.mamath@gmail.com",
-        isUserFrom: [],
+      const response = await axiosClient({
+        method: "post",
+        url: "/api/login",
+        data: formData,
       });
-      navigate("/daily");
-
-      return;
-    }
+      if (!response) {
+        return;
+      }
+  
+      if (response.status === 200) {
+        enqueueSnackbar("You are signed in !", { variant: "success" });
+        authenticationCtx.setIsAuthenticated(true);
+        authenticationCtx.setConnectedUser({
+          email: "frederic.mamath@gmail.com",
+          isUserFrom: [],
+        });
+        navigate("/daily");
+  
+        return;
+      }
   };
 
   return (
