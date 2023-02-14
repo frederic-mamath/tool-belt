@@ -1,18 +1,9 @@
 import CastleIcon from "@mui/icons-material/Castle";
-import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 
+import NavBar from "components/NavBar";
 import { APP_BAR_HEIGHT } from "config/stylesheet";
 
 const SECTIONS = [
@@ -42,50 +33,7 @@ const SECTIONS = [
 const HomePage = () => {
   return (
     <Stack>
-      <AppBar color="primary" position="sticky">
-        <Container>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            py={1}
-          >
-            <Stack direction="row">
-              <img
-                src="/logo512.png"
-                alt="logo"
-                style={{ height: 40, width: 40 }}
-              />
-              <Button color="inherit">Daily</Button>
-              <Button color="inherit">Weekly</Button>
-            </Stack>
-            <Box
-              sx={{
-                display: {
-                  sm: "block",
-                  xs: "none",
-                },
-              }}
-            >
-              <Stack direction="row">
-                <Button color="inherit">Sign In</Button>
-                <Button color="inherit">Request Access</Button>
-              </Stack>
-            </Box>
-            <Box
-              sx={{
-                display: {
-                  sm: "none",
-                },
-              }}
-            >
-              <IconButton color="inherit">
-                <MenuIcon />
-              </IconButton>
-            </Box>
-          </Stack>
-        </Container>
-      </AppBar>
+      <NavBar />
       <Container>
         <Stack
           sx={{ height: `calc(100vh - ${APP_BAR_HEIGHT})` }}

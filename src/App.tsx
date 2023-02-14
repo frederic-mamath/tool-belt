@@ -12,6 +12,7 @@ import SignInPage from "pages/SignInPage";
 import SprintPage from "pages/SprintPage";
 import SprintsPage from "pages/SprintsPage";
 import { queryClient } from "services/reactQuery";
+import { ROUTES } from "services/routes";
 
 const App = () => {
   return (
@@ -22,10 +23,13 @@ const App = () => {
             <BrowserRouter>
               <Layout>
                 <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/sign/in" element={<SignInPage />} />
-                  <Route path="/daily" element={<DailyPage />} />
-                  <Route path="/sprints" element={<SprintsPage />} />
+                  <Route path={ROUTES.HOME} element={<HomePage />} />
+                  <Route path={ROUTES.SIGN_IN} element={<SignInPage />} />
+                  <Route path={ROUTES.DAILY} element={<DailyPage />} />
+                  <Route
+                    path={ROUTES.ACTIVE_SPRINT}
+                    element={<SprintsPage />}
+                  />
                   <Route path="/sprints/:sprintId" element={<SprintPage />} />
                 </Routes>
               </Layout>
