@@ -44,6 +44,28 @@ export const findAndReplaceInvestigationLabel = (ticketName: string) => {
   };
 };
 
+export const findAndReplaceInvestigationLabel = (ticketName: string) => {
+  const investigationLabelRegEx = /\[.*?\]/;
+
+  const investigationLabelMatch = ticketName.match(investigationLabelRegEx);
+
+  if (!investigationLabelMatch) {
+    return {
+      oldName: ticketName,
+      isInvestigation: false,
+      newName: null,
+    };
+  }
+
+  const newName = ticketName.replace("[R]", "");
+
+  return {
+    oldName: ticketName,
+    isInvestigation: true,
+    newName,
+  };
+};
+
 export const getFilteredTicketName = (ticketName: string) => {
   let filteredTicketName = ticketName;
   const replacedInvestigationLabel =

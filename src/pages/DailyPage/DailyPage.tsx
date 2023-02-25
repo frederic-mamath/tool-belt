@@ -1,11 +1,4 @@
-import {
-  Button,
-  Card,
-  CardActionArea,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Card, CardActionArea, Stack, Typography } from "@mui/material";
 import { useMachine } from "@xstate/react";
 import { DateTime } from "luxon";
 import {
@@ -150,7 +143,7 @@ const DailyPage = () => {
               <Card sx={{ p: 2, ...shouldMeetingEndStyle }}>
                 <Typography variant="h3">{meetingTimerDisplay}</Typography>
               </Card>
-              <Tooltip title="This creates a snapshot to be able to identify problems tomorrow">
+              {/* <Tooltip title="This creates a snapshot to be able to identify problems tomorrow">
                 <Button variant="contained" disabled>
                   Create snapshot
                 </Button>
@@ -159,7 +152,7 @@ const DailyPage = () => {
                 <Button variant="contained" disabled>
                   Send email
                 </Button>
-              </Tooltip>
+              </Tooltip> */}
               <BurndownChart />
             </Stack>
           </Stack>
